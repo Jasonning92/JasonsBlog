@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="exporter-version" content="Evernote Mac 6.3 (452849)"/>
+    <meta name="altitude" content="58.7570915222168"/>
+    <meta name="author" content="ningzhaokun92@gmail.com"/>
+    <meta name="created" content="2015-08-19 03:22:24 +0000"/>
+    <meta name="latitude" content="39.99716581130889"/>
+    <meta name="longitude" content="116.3292000207051"/>
+    <meta name="source" content="desktop.mac"/>
+    <meta name="updated" content="2015-12-08 09:17:08 +0000"/>
+    <title>经验总结</title></head>
+<body style="background-color:#202020;padding: 50px 20px" bgcolor="#202020">
+<div><span style="color: rgb(168, 183, 198);"><span style="font-size: 24px;">一. CSS小tip</span></span></div>
+<ul>
+    <li><span style="color: rgb(168, 183, 198);">Chrome在设置font-size时，小于12px的都将无效，使用transform:scale(0.8);来缩小（缺点是整个容器也将缩小）。</span>
+    </li>
+    <li><span style="color: rgb(168, 183, 198);">使用CSS<span style="color: rgb(0, 153, 0);">截断文字</span>方法：</span>
+        <ul>
+            <li><span style="color: rgb(168, 183, 198);"><span style="color: rgb(153, 117, 171);">display</span>: inline-block<span
+                    style="color: rgb(206, 120, 39);">;</span> <span
+                    style="color: rgb(153, 117, 171);">white-space</span>: nowrap<span
+                    style="color: rgb(206, 120, 39);">;</span> <span
+                    style="color: rgb(153, 117, 171);">text-overflow</span>: ellipsis<span
+                    style="color: rgb(206, 120, 39);">;</span> <span style="color: rgb(153, 117, 171);">overflow</span>: hidden<span
+                    style="color: rgb(206, 120, 39);">;</span></span></li>
+        </ul>
+    </li>
+    <li><span style="color: rgb(168, 183, 198);"><span style="color: rgb(0, 153, 0);">居中大法</span>：</span>
+        <ul>
+            <li><span style="color: rgb(168, 183, 198);"><span style="color: rgb(153, 117, 171);">left</span>:50%<span
+                    style="color: rgb(206, 120, 39);">;</span> <span
+                    style="color: rgb(153, 117, 171);">top</span>:50%<span
+                    style="color: rgb(206, 120, 39);">; </span><span style="color: rgb(153, 117, 171);">transform</span>:translate(-50%,-50%)<span
+                    style="color: rgb(206, 120, 39);">; </span><span style="color: rgb(153, 117, 171);">-webkit-transform</span>:translate(-50%,-50%)<span
+                    style="color: rgb(206, 120, 39);">; </span><span style="color: rgb(153, 117, 171);">position</span>: absolute<span
+                    style="color: rgb(206, 120, 39);">;</span></span></li>
+        </ul>
+    </li>
+    <li><span style="color: rgb(168, 183, 198);"><span style="color: rgb(0, 153, 0);">border-radius</span>：可以赋8个值，<code
+            style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;">斜线前面的影响的是水平方向，斜线后面影响的是垂直方向，各个数字就分别代表四个不一样的方向。</code></span>
+        <ul>
+            <li><span style="color: rgb(168, 183, 198);"><code
+                    style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;">如：</code><code
+                    style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;"><span
+                    style="box-sizing: border-box;"><span style="box-sizing: border-box;"><span
+                    style="color: rgb(153, 117, 171);"><span style="box-sizing: border-box;">border-radius</span></span>: <span
+                    style="box-sizing: border-box;"><span style="box-sizing: border-box;">5px</span> <span
+                    style="box-sizing: border-box;">5px</span> <span style="box-sizing: border-box;">3px</span> <span
+                    style="box-sizing: border-box;">2px</span> / <span style="box-sizing: border-box;">5px</span> <span
+                    style="box-sizing: border-box;">5px</span> <span style="box-sizing: border-box;">1px</span> <span
+                    style="box-sizing: border-box;">3px</span></span></span><span
+                    style="color: rgb(206, 120, 39);">;</span></span></code><code
+                    style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;"> </code></span>
+            </li>
+        </ul>
+    </li>
+    <li><span style="color: rgb(168, 183, 198);"><span style="color: rgb(0, 153, 0);">outlinet</span>：将input输入框去掉默认的蓝线框的方法</span>
+        <ul>
+            <li><span style="color: rgb(168, 183, 198);"><code
+                    style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;"><span
+                    style="box-sizing: border-box;"><span style="box-sizing: border-box;"><span
+                    style="color: rgb(153, 117, 171);"><span
+                    style="box-sizing: border-box;">outline</span></span> : <span
+                    style="box-sizing: border-box;">none</span></span><span
+                    style="color: rgb(206, 120, 39);">;</span></span></code></span></li>
+        </ul>
+    </li>
+    <li><span style="color: rgb(168, 183, 198);"><code
+            style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;"><span
+            style="box-sizing: border-box;"><span style="box-sizing: border-box;"><span style="box-sizing: border-box;"><span
+            style="color: rgb(0, 153, 0);">outline-offset</span>：</span></span></span></code>outline的距离</span>
+        <ul>
+            <li><span style="color: rgb(168, 183, 198);"><code
+                    style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;"><span
+                    style="box-sizing: border-box;"><span style="box-sizing: border-box;"><span
+                    style="color: rgb(153, 117, 171);"><span
+                    style="box-sizing: border-box;">outline-offset</span></span>: <span style="box-sizing: border-box;"><span
+                    style="box-sizing: border-box;">4px</span></span></span> <span
+                    style="color: rgb(206, 120, 39);">;</span></span></code></span></li>
+        </ul>
+    </li>
+    <li><span style="color: rgb(168, 183, 198);"><span style="color: rgb(0, 153, 0);">empty-cells</span>：table<span
+            style="font-size: 14px;"><span
+            style="font-family: monospace;">中</span>，你可以使用empty-cells属性来指定相应的样式</span></span>
+        <ul>
+            <li><span style="color: rgb(168, 183, 198);"><code
+                    style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;"><span
+                    style="color: rgb(255, 199, 101);"><span style="box-sizing: border-box;">table</span></span> <span
+                    style="box-sizing: border-box;">{ <span style="box-sizing: border-box;"><span
+                    style="color: rgb(153, 117, 171);"><span style="box-sizing: border-box;">empty-cells</span></span>: <span
+                    style="box-sizing: border-box;">hide</span></span><span
+                    style="color: rgb(206, 120, 39);">;</span> <span
+                    style="box-sizing: border-box;">}</span></span></code></span></li>
+        </ul>
+    </li>
+    <li><span style="color: rgb(168, 183, 198);"><span style="color: rgb(0, 153, 0);">clip</span>：定义一个剪裁矩形。对于一个绝对定义元素，在这个矩形内的内容才可见</span>
+        <ul>
+            <li><span style="color: rgb(168, 183, 198);"><code
+                    style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;"><span
+                    style="box-sizing: border-box;"><span style="box-sizing: border-box;"><span
+                    style="color: rgb(153, 117, 171);"><span style="box-sizing: border-box;">clip</span></span>: <span
+                    style="box-sizing: border-box;"><span style="color: rgb(255, 199, 101);"><span
+                    style="box-sizing: border-box;">rect</span></span>(<span
+                    style="box-sizing: border-box;">110px</span>, <span
+                    style="box-sizing: border-box;">160px</span>, <span
+                    style="box-sizing: border-box;">170px</span>, <span
+                    style="box-sizing: border-box;">60px</span>)</span></span><span
+                    style="color: rgb(206, 120, 39);">;</span></span></code><code
+                    style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;"> </code></span>
+            </li>
+        </ul>
+    </li>
+    <li><span style="color: rgb(168, 183, 198);"><code
+            style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;"><span
+            style="box-sizing: border-box;"><span style="color: rgb(0, 153, 0);">::first-letter</span>：</span></code>第一个字母就会被修饰到</span>
+        <ul>
+            <li><span style="color: rgb(168, 183, 198);"><code
+                    style="box-sizing: border-box; font-family: Consolas, Menlo, Monaco, 'Courier New', monospace; padding: 0px; background-color: transparent; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; white-space: inherit; overflow-wrap: normal;"><span
+                    style="color: rgb(255, 199, 101);"><span style="box-sizing: border-box;">.text</span></span><span
+                    style="box-sizing: border-box;">::<span
+                    style="color: rgb(255, 199, 101);">first-letter</span></span> <span style="box-sizing: border-box;">{ <span
+                    style="box-sizing: border-box;"><span style="color: rgb(153, 117, 171);"><span
+                    style="box-sizing: border-box;">color</span></span>: <span
+                    style="box-sizing: border-box;">blue</span></span><span
+                    style="color: rgb(206, 120, 39);">;</span> <span style="box-sizing: border-box;"><span
+                    style="color: rgb(153, 117, 171);"><span
+                    style="box-sizing: border-box;">background</span></span>: <span style="box-sizing: border-box;">yellow</span></span><span
+                    style="color: rgb(206, 120, 39);">;</span> <span
+                    style="box-sizing: border-box;">}</span></span></code></span></li>
+        </ul>
+    </li>
+    <li><span style="font-family: Consolas, Menlo, Monaco, 'Courier New', monospace;"><span
+            style="color: rgb(168, 183, 198);">实现左边div固定宽度，右边div自适应撑满剩下的宽度</span></span>
+        <ul>
+            <li><span style="font-family: Consolas, Menlo, Monaco, 'Courier New', monospace;"><span
+                    style="color: rgb(168, 183, 198);"><span
+                    style="color: rgb(255, 199, 101);">.container</span> { <span style="color: rgb(153, 117, 171);">display</span>: flex }</span></span>
+            </li>
+            <li><span style="font-family: Consolas, Menlo, Monaco, 'Courier New', monospace;"><span
+                    style="color: rgb(168, 183, 198);"><span style="color: rgb(255, 199, 101);">.left</span> { <span
+                    style="color: rgb(153, 117, 171);">flex</span>: none; <span
+                    style="color: rgb(153, 117, 171);">width</span>: whatever }</span></span></li>
+            <li><span style="font-family: Consolas, Menlo, Monaco, 'Courier New', monospace;"><span
+                    style="color: rgb(168, 183, 198);"><span style="color: rgb(255, 199, 101);">.right</span> { <span
+                    style="color: rgb(153, 117, 171);">flex</span>: 1 }</span></span></li>
+        </ul>
+    </li>
+</ul>
+<div><span style="color: rgb(168, 183, 198);"><span style="font-size: 24px;">二. JQ小tip</span></span></div>
+<ul>
+    <li><span style="color: rgb(168, 183, 198);">使用 ‘use strict’;将javascript设定为<span
+            style="color: rgb(0, 153, 0);">严格模式</span>。</span></li>
+    <li><span style="color: rgb(168, 183, 198);">使用<span style="color: rgb(0, 153, 0);">for...in...</span>时，要判断是否为拥有属性，否则会报警告</span>
+    </li>
+</ul>
+<div style="margin: 0px; padding: 0px; font-style: normal; box-sizing: border-box !important; clear: both; min-height: 1em;">
+    <div><span style="color: rgb(168, 183, 198);">          <span style="color: rgb(206, 120, 39);">for</span> (<span
+            style="color: rgb(206, 120, 39);">var</span> p <span
+            style="color: rgb(206, 120, 39);">in</span> person) {</span></div>
+</div>
+<div style="margin: 0px; padding: 0px; font-style: normal; box-sizing: border-box !important; clear: both; min-height: 1em;">
+    <div><span style="color: rgb(168, 183, 198);">               if (person.<span style="color: rgb(255, 199, 101);">hasOwnProperty</span>(p)) {</span>
+    </div>
+</div>
+<div style="margin: 0px; padding: 0px; font-style: normal; box-sizing: border-box !important; clear: both; min-height: 1em;">
+    <div><span style="color: rgb(168, 183, 198);">                    <span
+            style="color: rgb(153, 117, 171);">console</span>.<span style="color: rgb(255, 199, 101);">log</span>(person[p])<span
+            style="color: rgb(206, 120, 39);">;</span></span></div>
+</div>
+<div style="margin: 0px; padding: 0px; font-style: normal; box-sizing: border-box !important; clear: both; min-height: 1em;">
+    <div><span style="color: rgb(168, 183, 198);">               }</span></div>
+</div>
+<div style="margin: 0px; padding: 0px; font-style: normal; box-sizing: border-box !important; clear: both; min-height: 1em;">
+    <div><span style="color: rgb(168, 183, 198);">          }</span></div>
+</div>
+<ul>
+    <li><span style="color: rgb(168, 183, 198);">判断是否是方法，再执行：</span></li>
+</ul>
+<div><span style="color: rgb(168, 183, 198);">               <span style="color: rgb(206, 120, 39);">if</span> (<span
+        style="color: rgb(206, 120, 39);">typeof</span> LoadingEnd === "<span
+        style="color: rgb(0, 153, 0);">function</span>") {      </span></div>
+<div><span style="color: rgb(168, 183, 198);">                    LoadingEnd()<span
+        style="color: rgb(206, 120, 39);">;</span></span></div>
+<div><span style="color: rgb(168, 183, 198);">                }</span></div>
+<ul>
+    <li><span style="color: rgb(0, 153, 0);">跨域发送post请求</span></li>
+</ul>
+<div><span style="color: rgb(168, 183, 198);">               <span
+        style="color: rgb(153, 117, 171);">jQuery</span>.<span style="color: rgb(153, 117, 171);">support</span>.<span
+        style="color: rgb(153, 117, 171);">cors</span> = <span style="color: rgb(206, 120, 39);">true</span>;</span>
+</div>
+<div><span style="color: rgb(168, 183, 198);">              $.<span style="color: rgb(255, 199, 101);">ajax</span>({    </span>
+</div>
+<div><span style="color: rgb(168, 183, 198);">                  <span
+        style="color: rgb(153, 117, 171);">type</span>: "<span style="color: rgb(0, 153, 0);">POST</span>",     </span>
+</div>
+<div><span style="color: rgb(168, 183, 198);">                  <span style="color: rgb(153, 117, 171);">url</span>: url_post,</span>
+</div>
+<div><span style="color: rgb(168, 183, 198);">                  <span
+        style="color: rgb(153, 117, 171);">crossDomain</span>: <span
+        style="color: rgb(206, 120, 39);">true</span>,</span></div>
+<div><span style="color: rgb(168, 183, 198);">                  <span style="color: rgb(255, 199, 101);">success</span>: <span
+        style="color: rgb(206, 120, 39);">function</span> (result) {}</span></div>
+<div><span style="color: rgb(168, 183, 198);">                  }     </span></div>
+<div><span style="color: rgb(168, 183, 198);">              })<span style="color: rgb(206, 120, 39);">;</span></span>
+</div>
+<ul>
+    <li><span style="color: rgb(168, 183, 198);"><span style="color: rgb(0, 153, 0);">eval(..)</span>函数会将其中的内容视为程序中的代码，通常用于执行动态代码，如：</span>
+    </li>
+</ul>
+<div><span style="color: rgb(168, 183, 198);">               <span style="color: rgb(255, 199, 101);">eval</span>(“<span
+        style="color: rgb(206, 120, 39);">var</span> a = 2”)<span style="color: rgb(206, 120, 39);">;</span>     </span>
+</div>
+<div><span style="color: rgb(168, 183, 198);">               <span
+        style="color: rgb(153, 117, 171);">console</span>.<span style="color: rgb(255, 199, 101);">log</span>(a)<span
+        style="color: rgb(206, 120, 39);">;</span>//输出2</span></div>
+<ul>
+    <li><span style="color: rgb(168, 183, 198);">关于命名空间</span></li>
+</ul>
+<div><span style="color: rgb(168, 183, 198);">               <span style="color: rgb(206, 120, 39);">var</span> Myfunction = {</span>
+</div>
+<div><span style="color: rgb(168, 183, 198);">                    <span
+        style="color: rgb(153, 117, 171);">something</span>: <span
+        style="color: rgb(0, 153, 0);">" mything "</span><span style="color: rgb(206, 120, 39);">,</span></span></div>
+<div><span style="color: rgb(168, 183, 198);">                    <span
+        style="color: rgb(153, 117, 171);">doSometing</span>: <span style="color: rgb(206, 120, 39);">function</span>( ) {</span>
+</div>
+<div><span style="color: rgb(168, 183, 198);">                         // …...</span></div>
+<div><span style="color: rgb(168, 183, 198);">                    }</span></div>
+<div><span style="color: rgb(168, 183, 198);">               }     </span></div>
+<ul>
+    <li><span style="color: rgb(168, 183, 198);"><span style="color: rgb(0, 153, 0);">匿名函数（表达式）</span>就是函数表达式，函数表达式可以省略函数名，如</span>
+    </li>
+</ul>
+<div><span style="color: rgb(168, 183, 198);">               (<span
+        style="color: rgb(206, 120, 39);">function</span> <span style="color: rgb(255, 199, 101);">foo</span>(){</span>
+</div>
+<div><span style="color: rgb(168, 183, 198);">                    //…...</span></div>
+<div><span style="color: rgb(168, 183, 198);">               })()<span style="color: rgb(206, 120, 39);">;</span>//这样这个函数表达式将自动运行，并且形成一个独立的作用域</span>
+</div>
+<div style="text-align: left;"><span style="color: rgb(168, 183, 198);"><br/></span></div>
+<ul>
+    <li><span style="color: rgb(168, 183, 198);"><span style="color: rgb(0, 153, 0);">let关键字</span>，可以讲变量绑定到所在的作用于中，上层作用域将不能使用该变量。</span>
+    </li>
+</ul>
+<div><span style="color: rgb(168, 183, 198);">               <span style="color: rgb(206, 120, 39);">function</span> dosomething(){</span>
+</div>
+<div><span style="color: rgb(168, 183, 198);">                    <span style="color: rgb(206, 120, 39);">let</span> a = 10<span
+        style="color: rgb(206, 120, 39);">;</span></span></div>
+<div><span style="color: rgb(168, 183, 198);">               }     </span></div>
+<div><span style="color: rgb(168, 183, 198);">               <span
+        style="color: rgb(153, 117, 171);">console</span>.<span style="color: rgb(255, 199, 101);">log</span>(a);//访问错误</span>
+</div>
+<div style="text-align: left;"><span style="color: rgb(168, 183, 198);"><br/></span></div>
+<ul>
+    <li><span style="color: rgb(168, 183, 198);"><span style="color: rgb(0, 153, 0);">const关键字</span>定义常量，和let用法相同，不过变量一旦赋值将不能修改</span>
+    </li>
+    <li><span style="color: rgb(0, 153, 0);">动态加载样式表css</span></li>
+</ul>
+<div style="margin-left:40px;"><span style="color: rgb(168, 183, 198);"><span
+        style="color: rgb(206, 120, 39);">function</span> <span style="color: rgb(255, 199, 101);">loadCss</span>( url ){</span>
+</div>
+<div style="margin-left:80px;"><span style="color: rgb(168, 183, 198);"><span
+        style="color: rgb(206, 120, 39);">var</span> link = <span
+        style="color: rgb(153, 117, 171);">document</span>.<span style="color: rgb(255, 199, 101);">createElement</span>( "link" );</span>
+</div>
+<div style="margin-left:80px;"><span style="color: rgb(168, 183, 198);">link.<span style="color: rgb(153, 117, 171);">type</span> = <span
+        style="color: rgb(0, 153, 0);">"text/css"</span><span style="color: rgb(206, 120, 39);">;</span></span></div>
+<div style="margin-left:80px;"><span style="color: rgb(168, 183, 198);">link.<span style="color: rgb(153, 117, 171);">rel</span> = <span
+        style="color: rgb(0, 153, 0);">"stylesheet"</span><span style="color: rgb(206, 120, 39);">;</span></span></div>
+<div style="margin-left:80px;"><span style="color: rgb(168, 183, 198);">link.<span style="color: rgb(153, 117, 171);">href</span> = url<span
+        style="color: rgb(206, 120, 39);">;</span></span></div>
+<div style="margin-left:80px;"><span style="color: rgb(168, 183, 198);"><span style="color: rgb(153, 117, 171);">document</span>.<span
+        style="color: rgb(255, 199, 101);">getElementsByTagName</span>( <span
+        style="color: rgb(0, 153, 0);">"head"</span> )[0].<span style="color: rgb(255, 199, 101);">appendChild</span>( link )<span
+        style="color: rgb(206, 120, 39);">;</span></span></div>
+<div style="margin-left:40px;"><span style="color: rgb(168, 183, 198);">}<span
+        style="color: rgb(206, 120, 39);">;</span></span></div>
+</body>
+</html>

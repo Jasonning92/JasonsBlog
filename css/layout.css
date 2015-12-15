@@ -1,0 +1,76 @@
+/* line 56, ../sass/_function.sass */
+.thom_picture {
+  background-image: url("/image/thom.jpg");
+}
+
+/* line 56, ../sass/_function.sass */
+.jonny_picture {
+  background-image: url("/image/jonny.jpg");
+}
+
+/* line 56, ../sass/_function.sass */
+.colin_picture {
+  background-image: url("/image/colin.jpg");
+}
+
+/* line 56, ../sass/_function.sass */
+.phil_picture {
+  background-image: url("/image/phil.jpg");
+}
+
+/* line 48, layout/*.png */
+.layout-sprite, header > div {
+  background-image: url('../images/layout-s5ca1ad2247.png');
+  background-repeat: no-repeat;
+}
+
+/* line 9, ../sass/layout.sass */
+header {
+  width: 100%;
+  height: 300px;
+  background-color: #3a424d;
+}
+/* line 13, ../sass/layout.sass */
+header > div {
+  width: 1180px;
+  margin: 0 auto;
+  height: 100%;
+  position: relative;
+  background-position: 0 0;
+}
+/* line 19, ../sass/layout.sass */
+header > div > h1 {
+  color: white;
+  position: absolute;
+  top: 60px;
+  left: 20px;
+}
+/* line 24, ../sass/layout.sass */
+header > div > span {
+  color: #858e97;
+  position: absolute;
+  top: 110px;
+  left: 20px;
+}
+
+/* line 29, ../sass/layout.sass */
+body {
+  background: url("../images/layout/signed_bg.jpg") repeat 0 0;
+}
+
+/* line 31, ../sass/layout.sass */
+#main_div {
+  width: 1180px;
+  margin: 0 auto;
+}
+/* line 34, ../sass/layout.sass */
+#main_div > div.bloglist {
+  width: 100%;
+}
+/* line 36, ../sass/layout.sass */
+#main_div > div.bloglist > a.one {
+  display: block;
+  background-color: #FFFFFF;
+  margin: 30px 0;
+  padding: 50px;
+}

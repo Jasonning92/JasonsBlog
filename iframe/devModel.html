@@ -1,109 +1,184 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.3 (452849)"/><meta name="altitude" content="57.97721862792969"/><meta name="author" content="jasonning92@163.com"/><meta name="created" content="2015-12-15 09:31:25 +0000"/><meta name="latitude" content="39.99707085797257"/><meta name="longitude" content="116.3292327707198"/><meta name="source" content="desktop.mac"/><meta name="updated" content="2015-12-16 06:24:32 +0000"/><title>关于前端开发模式</title></head><body>
-<div><span style="font-size: 24px;">一. 前言</span></div>
-<div>          最开始刚接触前端时，感觉所有的操作都是在 control+c 和 control+v，对于编写html页面来讲，每个页面大部分的结构都是相似的；对于写css样式，很多时候都是大段大段的粘贴，比如按钮的hover效果，也许只是背景颜色不同，box-shadow都是一样的，而box-shadow却需要带上各种浏览器前缀。后来慢慢的，css样式使用sass编写，带来了强大的 @mixin 和 @include，而且缩进语法也让页面清爽了不少，不用再看一大长串的样式了；compass 自带的自动添加浏览器前缀告别了手动粘贴；自动生成的雪碧图，告别了PS自己拼图的境地。对于 html页面的编写，现在使用了 jade，同样提供了引入和大量减少手敲字符的劳动量。</div>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="exporter-version" content="Evernote Mac 6.3 (452849)"/>
+    <meta name="altitude" content="57.97721862792969"/>
+    <meta name="author" content="jasonning92@163.com"/>
+    <meta name="created" content="2015-12-15 09:31:25 +0000"/>
+    <meta name="latitude" content="39.99707085797257"/>
+    <meta name="longitude" content="116.3292327707198"/>
+    <meta name="source" content="desktop.mac"/>
+    <meta name="updated" content="2015-12-16 06:24:32 +0000"/>
+    <title>关于前端开发模式</title></head>
+<body style="padding: 50px 20px">
+<div style="padding: 15px 0"><span style="font-size: 24px;">一. 前言</span></div>
+<div>          最开始刚接触前端时，感觉所有的操作都是在 control+c
+    和 control+v，对于编写html页面来讲，每个页面大部分的结构都是相似的；对于写css样式，很多时候都是大段大段的粘贴，比如按钮的hover效果，也许只是背景颜色不同，box-shadow都是一样的，而box-shadow却需要带上各种浏览器前缀。后来慢慢的，css样式使用sass编写，带来了强大的
+    @mixin 和 @include，而且缩进语法也让页面清爽了不少，不用再看一大长串的样式了；compass 自带的自动添加浏览器前缀告别了手动粘贴；自动生成的雪碧图，告别了PS自己拼图的境地。对于 html页面的编写，现在使用了
+    jade，同样提供了引入和大量减少手敲字符的劳动量。
+</div>
 <div><br/></div>
 <div>
-<hr/></div>
+    <hr/>
+</div>
 <div><br/></div>
-<div><span style="font-size: 24px;">二. 前端基本结构</span></div>
+<div style="padding: 15px 0"><span style="font-size: 24px;">二. 前端基本结构</span></div>
 <div>          现在的趋势是前段工程模块化，简而言之就是前端页面是一个由『积木』（组件）搭建起来的『楼房』（完整html页面）。</div>
-<div>          这样做的好处主要有两点：1. 组件可以再不同项目中复用，最大的改动可能只是『换肤』（修改css文件）。2. 如果你的项目使用了WebApi，那么这样的组件式开发将完美契合你的开发，也就是说一个组件是一个VM（或者是C）。</div>
+<div>          这样做的好处主要有两点：1. 组件可以再不同项目中复用，最大的改动可能只是『换肤』（修改css文件）。2.
+    如果你的项目使用了WebApi，那么这样的组件式开发将完美契合你的开发，也就是说一个组件是一个VM（或者是C）。
+</div>
 <div>          那么，我们的一个组件需要包含什么呢？需要包括：结构（html）、行为（js）、样式（css）、数据绑定（ag、react等）。</div>
-<div>          <img src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/94D7DD68-1049-475D-A2E1-27F2EE3B074E.png" height="264" width="318"/></div>
+<div style="padding: 15px 0">          <img
+        src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/94D7DD68-1049-475D-A2E1-27F2EE3B074E.png"
+        height="264" width="318"/></div>
 <div>          其中，html（jade）主要控制组件结构；js文件控制组件动画等；css（sass）让组件变『漂亮』，并且有的组件需要做到响应式的显示；vm则将数据绑定到组件上。</div>
 <div>          这样，我们的整个项目就是这样的：       </div>
 <table style="border-collapse: collapse; margin-left: 0px;width:52.97520661157024%;table-layout:fixed;">
-<tr>
-<td style="border: 1px solid rgb(219, 219, 219); padding: 10px; margin: 0px;width:30.733229329173167%;">
-<div>层级结构</div>
-</td>
-<td style="border: 1px solid rgb(219, 219, 219); padding: 10px; margin: 0px;width:69.11076443057722%;">
-<div>解释</div>
-</td>
-</tr>
-<tr>
-<td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
-<div><img src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/72E6EE61-265B-460F-8983-CB5DA079C778.png" height="290" width="982"/></div>
-</td>
-<td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
-<div>一个项目</div>
-<div>由许多的页面组成。</div>
-</td>
-</tr>
-<tr>
-<td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
-<div><img src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/E60BC787-DE8C-41E0-BF3D-15D78CA3192B.png" height="1082" width="858"/></div>
-</td>
-<td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
-<div>一个页面</div>
-<div>由许多组件填充</div>
-<div>有时也会出现组件套这组件的情况，比如一个模态窗里边套着另一个组件等情况</div>
-<div>其中，页面的css只是控制组件的位置和大小</div>
-<div>对于大型团队，组件可以分配给不同的人去编写，因为组件之间耦合程度很低</div>
-<div><br/></div>
-</td>
-</tr>
-<tr>
-<td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
-<div><img src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/F66D0CE0-9006-49D4-9E95-20D638AE8C7B.png" height="362" width="598"/></div>
-</td>
-<td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
-<div>一个组件包含</div>
-<div>结构：html</div>
-<div>样式：css</div>
-<div>行为：js</div>
-<div>数据：vm</div>
-</td>
-</tr>
+    <tr>
+        <td style="border: 1px solid rgb(219, 219, 219); padding: 15px; margin: 0px;width:30.733229329173167%;">
+            <div>层级结构</div>
+        </td>
+        <td style="border: 1px solid rgb(219, 219, 219); padding: 15px; margin: 0px;width:69.11076443057722%;">
+            <div>解释</div>
+        </td>
+    </tr>
+    <tr>
+        <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
+            <div><img style="max-width: 100%;max-height: 100%"
+                    src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/72E6EE61-265B-460F-8983-CB5DA079C778.png"/></div>
+        </td>
+        <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
+            <div>一个项目</div>
+            <div>由许多的页面组成。</div>
+        </td>
+    </tr>
+    <tr>
+        <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
+            <div><img style="max-width: 100%;max-height: 100%"
+                    src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/E60BC787-DE8C-41E0-BF3D-15D78CA3192B.png"/></div>
+        </td>
+        <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
+            <div>一个页面</div>
+            <div>由许多组件填充</div>
+            <div>有时也会出现组件套这组件的情况，比如一个模态窗里边套着另一个组件等情况</div>
+            <div>其中，页面的css只是控制组件的位置和大小</div>
+            <div>对于大型团队，组件可以分配给不同的人去编写，因为组件之间耦合程度很低</div>
+            <div><br/></div>
+        </td>
+    </tr>
+    <tr>
+        <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
+            <div><img style="max-width: 100%;max-height: 100%"
+                    src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/F66D0CE0-9006-49D4-9E95-20D638AE8C7B.png"/></div>
+        </td>
+        <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
+            <div>一个组件包含</div>
+            <div>结构：html</div>
+            <div>样式：css</div>
+            <div>行为：js</div>
+            <div>数据：vm</div>
+        </td>
+    </tr>
 </table>
 <div><span style="font-size: 24px;">         </span></div>
 <div>
-<hr/></div>
+    <hr/>
+</div>
 <div><span style="font-size: 24px;"> </span></div>
-<div><span style="font-size: 24px;">三.  模块化开发技术</span></div>
+<div style="padding: 15px 0"><span style="font-size: 24px;">三.  模块化开发技术</span></div>
 <div>          这一部分主要介绍一下之前提到的jade和sass如何配合模块化开发。</div>
-<div><span style="font-size: 18px;">     A. HTML编写新方式——Jade</span></div>
-<div>          如果你因为 html 的各种『 &lt; 』和『 /&gt; 』而烦恼，那么推荐使用 jade（<a href="http://naltatis.github.com/jade-syntax-docs">http://naltatis.github.com/jade-syntax-docs</a>） 。这里只是简要的说如何使用 Jade中的技术 来配合上面说的开发方式。</div>
+<div style="padding: 15px 0"><span style="font-size: 18px;">     A. HTML编写新方式——Jade</span></div>
+<div>          如果你因为 html 的各种『 &lt; 』和『 /&gt; 』而烦恼，那么推荐使用 jade（<a href="http://naltatis.github.com/jade-syntax-docs">http://naltatis.github.com/jade-syntax-docs</a>）
+    。这里只是简要的说如何使用 Jade中的技术 来配合上面说的开发方式。
+</div>
 <div>          根据刚才的开发模式，观察上面的组建类型，不难发现组件分为两种形式。一种是『盒子』，另一种是『零件』。</div>
 <ul>
-<li><i><b>『盒子』</b></i></li>
+    <li><i><b>『盒子』</b></i></li>
 </ul>
 <div>               盒子就是指该组件只是一个容器，如模态窗、滑动的一个抽屉。大部分盒子都不会有数据绑定的任务，相反，它的行为 js 可能会比较多，即它可能会包含很多的动画。</div>
-<div>               因为盒子『可能它的内部需要包含其他组件』的特性，我们就不能只用 Jade 提供的 <u><i>include</i></u> 来简单引入组件，就需要使用 <u><i>mixin</i></u> 来实现。</div>
-<div>
-<div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span style="color:#a07458;">mixin </span>SlideBox(name)<br/>
-    <span style="color:#e8bf6a;">div</span>(<span style="color:#bababa;">data-who</span>=<span style="color:#6a8759;">"#{name}"</span>)<br/>
-        <span style="color:#808080;">//盒子内容<br/></span><span style="color:#808080;">       </span> <span style="color:#e8bf6a;">div<br/></span><span style="color:#e8bf6a;">            block<br/></span><span style="color:#e8bf6a;">       </span> <span style="color:#e8bf6a;background-color:#344134;">a</span><br/></div>
+<div>               因为盒子『可能它的内部需要包含其他组件』的特性，我们就不能只用 Jade 提供的 <u><i>include</i></u> 来简单引入组件，就需要使用 <u><i>mixin</i></u> 来实现。
+</div>
+<div style="padding: 15px 0">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#a07458;">mixin </span>SlideBox(name)<br/>
+            <span style="color:#e8bf6a;">div</span>(<span style="color:#bababa;">data-who</span>=<span
+                style="color:#6a8759;">"#{name}"</span>)<br/>
+                <span style="color:#808080;">//盒子内容<br/></span><span style="color:#808080;">       </span> <span
+                style="color:#e8bf6a;">div<br/></span><span style="color:#e8bf6a;">            block<br/></span><span
+                style="color:#e8bf6a;">       </span> <span
+                style="color:#e8bf6a;background-color:#344134;">a</span><br/></div>
 </div>
 <div>              </div>
-<div>               如上图，我们定义了一个叫 SlideBox 的『盒子』，引用他可以传入一个叫 <u><i>name</i></u> 的参数，并且它拥有一个装东西的 <u><i>block</i></u> ，它代表这个盒子可以装的东西。这样定义之后我们就可以在主页面去引用它了，如下图：</div>
-<div>
-<div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span style="color:#a07458;">include </span><span style="color:#8585ff;">Components/m-SlideBox_m/SlideBox<br/></span>+<span style="color:#e8bf6a;">SlideBox</span>(<span style="color:#6a8759;">"test"</span>)<br/>
-    <span style="color:#a07458;">include </span><span style="color:#8585ff;">Components/CwList_r/CwList</span><br/></div>
+<div>               如上图，我们定义了一个叫 SlideBox 的『盒子』，引用他可以传入一个叫 <u><i>name</i></u> 的参数，并且它拥有一个装东西的 <u><i>block</i></u> ，它代表这个盒子可以装的东西。这样定义之后我们就可以在主页面去引用它了，如下图：
+</div>
+<div style="padding: 15px 0">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#a07458;">include </span><span
+            style="color:#8585ff;">Components/m-SlideBox_m/SlideBox<br/></span>+<span
+            style="color:#e8bf6a;">SlideBox</span>(<span style="color:#6a8759;">"test"</span>)<br/>
+            <span style="color:#a07458;">include </span><span
+                style="color:#8585ff;">Components/CwList_r/CwList</span><br/></div>
 </div>
 <div><br/></div>
 <div>               首先我们先将 mixin 引入进来，并且使用 +Name来引入这个『盒子』，并且下一行缩进后将需要添加的『零件』放到这个『盒子』里。这样，它就会生成如下图的html片段了。</div>
-<div>
-<div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span style="color:#808080;font-style:italic;">&lt;!-- 收缩展开盒子Created by Jason on 15/12/14.--&gt;<br/></span><span style="color:#e8bf6a;">&lt;div </span><span style="color:#bababa;">data-who=</span><span style="color:#a5c261;">"test"</span><span style="color:#e8bf6a;">&gt;<br/></span><span style="color:#e8bf6a;">   </span> <span style="color:#808080;font-style:italic;">&lt;!--盒子内容--&gt;<br/></span><span style="color:#808080;font-style:italic;">   </span> <span style="color:#e8bf6a;">&lt;div&gt;<br/></span><span style="color:#e8bf6a;">       </span> <span style="color:#808080;font-style:italic;">&lt;!-- 课件列表Created by Jason on 15/12/14.--&gt;<br/></span><span style="color:#808080;font-style:italic;">       </span> <span style="color:#e8bf6a;">&lt;div </span><span style="color:#bababa;">ms-controller=</span><span style="color:#a5c261;">"CwList"</span><span style="color:#e8bf6a;">&gt;<br/></span><span style="color:#e8bf6a;">            &lt;a </span><span style="color:#bababa;">ms-repeat=</span><span style="color:#a5c261;">"list"</span><span style="color:#e8bf6a;">&gt;</span><span style="color:#808080;font-style:italic;">&lt;!--图--&gt;<br/></span><span style="color:#808080;font-style:italic;">               </span> <span style="color:#e8bf6a;">&lt;div&gt;&lt;img </span><span style="color:#bababa;">ms-attr-src=</span><span style="color:#a5c261;">"el.img"</span><span style="color:#e8bf6a;">/&gt;&lt;/div&gt;<br/></span><span style="color:#e8bf6a;">               </span> <span style="color:#808080;font-style:italic;">&lt;!--文字--&gt;<br/></span><span style="color:#808080;font-style:italic;">               </span> <span style="color:#e8bf6a;">&lt;div&gt;&lt;span&gt;</span>{{el.name}}<span style="color:#e8bf6a;">&lt;/span&gt;&lt;span&gt;</span>评论数{{el.contNum}}<span style="color:#e8bf6a;">&lt;/span&gt;&lt;/div&gt;<br/></span><span style="color:#e8bf6a;">            &lt;/a&gt;<br/></span><span style="color:#e8bf6a;">        &lt;/div&gt;<br/></span><span style="color:#e8bf6a;">    &lt;/div&gt;<br/></span><span style="color:#e8bf6a;">    &lt;a&gt;&lt;/a&gt;<br/></span><span style="color:#e8bf6a;">&lt;/div&gt;</span><br/></div>
+<div style="padding: 15px 0">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#808080;font-style:italic;">&lt;!-- 收缩展开盒子Created by Jason on 15/12/14.--&gt;<br/></span><span
+            style="color:#e8bf6a;">&lt;div </span><span style="color:#bababa;">data-who=</span><span
+            style="color:#a5c261;">"test"</span><span style="color:#e8bf6a;">&gt;<br/></span><span
+            style="color:#e8bf6a;">   </span> <span
+            style="color:#808080;font-style:italic;">&lt;!--盒子内容--&gt;<br/></span><span
+            style="color:#808080;font-style:italic;">   </span> <span
+            style="color:#e8bf6a;">&lt;div&gt;<br/></span><span style="color:#e8bf6a;">       </span> <span
+            style="color:#808080;font-style:italic;">&lt;!-- 课件列表Created by Jason on 15/12/14.--&gt;<br/></span><span
+            style="color:#808080;font-style:italic;">       </span> <span style="color:#e8bf6a;">&lt;div </span><span
+            style="color:#bababa;">ms-controller=</span><span style="color:#a5c261;">"CwList"</span><span
+            style="color:#e8bf6a;">&gt;<br/></span><span style="color:#e8bf6a;">            &lt;a </span><span
+            style="color:#bababa;">ms-repeat=</span><span style="color:#a5c261;">"list"</span><span
+            style="color:#e8bf6a;">&gt;</span><span
+            style="color:#808080;font-style:italic;">&lt;!--图--&gt;<br/></span><span
+            style="color:#808080;font-style:italic;">               </span> <span style="color:#e8bf6a;">&lt;div&gt;&lt;img </span><span
+            style="color:#bababa;">ms-attr-src=</span><span style="color:#a5c261;">"el.img"</span><span
+            style="color:#e8bf6a;">/&gt;&lt;/div&gt;<br/></span><span style="color:#e8bf6a;">               </span>
+        <span style="color:#808080;font-style:italic;">&lt;!--文字--&gt;<br/></span><span
+                style="color:#808080;font-style:italic;">               </span> <span style="color:#e8bf6a;">&lt;div&gt;&lt;span&gt;</span>{{el.name}}<span
+                style="color:#e8bf6a;">&lt;/span&gt;&lt;span&gt;</span>评论数{{el.contNum}}<span style="color:#e8bf6a;">&lt;/span&gt;&lt;/div&gt;<br/></span><span
+                style="color:#e8bf6a;">            &lt;/a&gt;<br/></span><span style="color:#e8bf6a;">        &lt;/div&gt;<br/></span><span
+                style="color:#e8bf6a;">    &lt;/div&gt;<br/></span><span
+                style="color:#e8bf6a;">    &lt;a&gt;&lt;/a&gt;<br/></span><span
+                style="color:#e8bf6a;">&lt;/div&gt;</span><br/></div>
 </div>
 <div><br/></div>
 <div>               有的情景下，我们的『盒子』需要变成一个『柜子』，就是说需要多个地方去装我们的『零件』，那我们定义『盒子』时，只需要加入多个 <u><i>block</i></u> 就可以了，如下图</div>
-<div>
-<div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span style="color:#a07458;">mixin </span>SlideBox(name)<br/>
-    <span style="color:#e8bf6a;">div</span>(<span style="color:#bababa;">data-who</span>=<span style="color:#6a8759;">"#{name}"</span>)<br/>
-        <span style="color:#808080;">//盒子内容<br/></span><span style="color:#808080;">       </span> <span style="color:#e8bf6a;">div<br/></span><span style="color:#e8bf6a;">            block<br/></span><span style="color:#e8bf6a;">        a<br/></span><span style="color:#e8bf6a;">           </span> <span style="color:#e8bf6a;background-color:#344134;">block</span><br/></div>
+<div style="padding: 15px 0">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#a07458;">mixin </span>SlideBox(name)<br/>
+            <span style="color:#e8bf6a;">div</span>(<span style="color:#bababa;">data-who</span>=<span
+                style="color:#6a8759;">"#{name}"</span>)<br/>
+                <span style="color:#808080;">//盒子内容<br/></span><span style="color:#808080;">       </span> <span
+                style="color:#e8bf6a;">div<br/></span><span style="color:#e8bf6a;">            block<br/></span><span
+                style="color:#e8bf6a;">        a<br/></span><span style="color:#e8bf6a;">           </span> <span
+                style="color:#e8bf6a;background-color:#344134;">block</span><br/></div>
 </div>
 <div><br/></div>
-<div>
-<div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span style="color:#a07458;">include </span><span style="color:#8585ff;background-color:#344134;">Components</span><span style="color:#8585ff;">/m-SlideBox_m/SlideBox<br/></span>+<span style="color:#e8bf6a;">SlideBox</span>(<span style="color:#6a8759;">"test"</span>)<br/>
-    <span style="color:#a07458;">include </span><span style="color:#8585ff;background-color:#344134;">Components</span><span style="color:#8585ff;">/CwList_r/CwList<br/></span><span style="color:#8585ff;">   </span> <span style="color:#a07458;">include </span><span style="color:#8585ff;background-color:#344134;">Components</span><span style="color:#8585ff;">/CommentBox_r/CommentBox</span><br/></div>
+<div style="padding: 15px 0">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#a07458;">include </span><span
+            style="color:#8585ff;background-color:#344134;">Components</span><span style="color:#8585ff;">/m-SlideBox_m/SlideBox<br/></span>+<span
+            style="color:#e8bf6a;">SlideBox</span>(<span style="color:#6a8759;">"test"</span>)<br/>
+            <span style="color:#a07458;">include </span><span
+                style="color:#8585ff;background-color:#344134;">Components</span><span style="color:#8585ff;">/CwList_r/CwList<br/></span><span
+                style="color:#8585ff;">   </span> <span style="color:#a07458;">include </span><span
+                style="color:#8585ff;background-color:#344134;">Components</span><span style="color:#8585ff;">/CommentBox_r/CommentBox</span><br/>
+    </div>
 </div>
 <div><br/></div>
 <div>          这样我们的盒子开发基本就结束了。</div>
 <ul>
-<li><i><b>『零件』</b></i></li>
+    <li><i><b>『零件』</b></i></li>
 </ul>
 <div><br/></div>
-</body></html>
+</body>
+</html>

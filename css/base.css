@@ -259,7 +259,7 @@ iframe {
 /* line 160, ../sass/base.sass */
 .blog-gotop {
   position: fixed;
-  bottom: 170px;
+  bottom: 100px;
   right: 36px;
   list-style: none;
   height: 50px;

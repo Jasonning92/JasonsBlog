@@ -153,10 +153,11 @@ header.page > div > a:hover {
 
 /* line 96, ../sass/layout.sass */
 .blogiframe {
+  width: 100%;
   margin-top: 40px;
-  overflow: hidden;
+  display: inline-block;
 }
-/* line 99, ../sass/layout.sass */
+/* line 100, ../sass/layout.sass */
 .blogiframe > .nav {
   padding: 10px;
   margin: 20px 0;
@@ -166,20 +167,20 @@ header.page > div > a:hover {
   -webkit-box-shadow: 2px 0 1px rgba(226, 224, 227, 0.5), -2px 0 1px rgba(226, 224, 227, 0.5), 0 2px 1px rgba(226, 224, 227, 0.5), 0 -2px 1px rgba(226, 224, 227, 0.5);
   box-shadow: 2px 0 1px rgba(226, 224, 227, 0.5), -2px 0 1px rgba(226, 224, 227, 0.5), 0 2px 1px rgba(226, 224, 227, 0.5), 0 -2px 1px rgba(226, 224, 227, 0.5);
 }
-/* line 105, ../sass/layout.sass */
+/* line 106, ../sass/layout.sass */
 .blogiframe > .nav > a {
   color: #858e97;
 }
-/* line 107, ../sass/layout.sass */
+/* line 108, ../sass/layout.sass */
 .blogiframe > .nav > a:hover {
   color: #9975ab;
 }
-/* line 109, ../sass/layout.sass */
+/* line 110, ../sass/layout.sass */
 .blogiframe > .nav > span {
   color: #454f59;
   padding: 0 10px;
 }
-/* line 112, ../sass/layout.sass */
+/* line 113, ../sass/layout.sass */
 .blogiframe > iframe {
   width: 100%;
   background-color: #FFFFFF;

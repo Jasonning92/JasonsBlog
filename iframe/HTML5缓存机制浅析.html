@@ -1,0 +1,1054 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="exporter-version" content="Evernote Mac 6.3 (452849)"/>
+    <meta name="created" content="2015-12-16 09:56:49 +0000"/>
+    <meta name="source" content="Clearly"/>
+    <meta name="source-url" content="http://www.csdn.net/article/2015-12-16/2826489/1"/>
+    <meta name="updated" content="2015-12-17 08:23:07 +0000"/>
+    <title>HTML5缓存机制浅析：移动端Web加载性能优化（转载）</title>
+    <link rel="stylesheet" href="../css/iframe.css">
+</head>
+<body>
+<div><b>摘要：</b>本文作者，腾讯游戏平台与社区产品部安卓开发组高级工程师贺辉超详细分析了各种缓存机制的原理、用法及特点，并针对Android移动端Web性能加载优化的需求，帮助开发者选择如何利用适当缓存机制来提高Web的加载性能。
+</div>
+<div>
+    <hr/>
+</div>
+<div><span style="font-size: 24px;"><b>1. HTML5缓存机制介绍</b></span></div>
+<div><br/></div>
+<div>HTML5是新一代的HTML标准，加入很多新的特性。离线存储（也可称为缓存机制）是其中一个非常重要的特性。HTML5引入的离线存储，这意味着Web应用可进行缓存，并可在没有因特网连接时进行访问。</div>
+<div><br/></div>
+<div>HTML5应用程序缓存为应用带来三个优势：</div>
+<ul>
+    <li>离线浏览：用户可在应用离线时使用它们；</li>
+    <li>速度：已缓存资源加载得更快；</li>
+    <li>减少服务器负载：浏览器将只从服务器下载更新过或更改过的资源。</li>
+</ul>
+<div>根据标准，到目前为止，HTML5一共有6种缓存机制，有些是之前已有，有些是HTML5才新加入的。</div>
+<ol>
+    <li>浏览器缓存机制；</li>
+    <li>Dom Storgage（Web Storage）存储机制；</li>
+    <li>Web SQL Database存储机制；</li>
+    <li>Application Cache（AppCache）机制；</li>
+    <li>Indexed Database （IndexedDB）；</li>
+    <li>File System API。</li>
+</ol>
+<div><br/></div>
+<div>下面我们首先分析各种缓存机制的原理、用法及特点；然后针对Android移动端Web性能加载优化的需求，看如何适当利用缓存机制来提高Web的加载性能。</div>
+<div><br/></div>
+<div>
+    <hr/>
+</div>
+<div><span style="font-size: 24px;"><b>2. HTML5缓存机制原理分析</b></span></div>
+<div><br/></div>
+<div><span style="font-size: 18px;"><b>2.1 浏览器缓存机制</b></span></div>
+<div><br/></div>
+<div>
+    浏览器缓存机制是指通过HTTP协议头里的Cache-Control（或Expires）和Last-Modified（或Etag）等字段来控制文件缓存的机制。这应该是Web中最早的缓存机制了，是在HTTP协议中实现的，有点不同于Dom
+    Storage、AppCache等缓存机制，但本质上是一样的。可以理解为，一个是协议层实现的，一个是应用层实现的。
+</div>
+<div><br/></div>
+<div><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">Cache-Control</span>
+    用于控制文件在本地缓存有效时长。最常见的，比如服务器回包：Cache-Control:max-age=600表示文件在本地应该缓存，且有效时长是600秒（从发出请求算起）。在接下来600秒内，如果有请求这个资源，浏览器不会发出HTTP请求，而是直接使用本地缓存的文件。
+</div>
+<div><br/></div>
+<div><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">Last-Modified</span>
+    是标识文件在服务器上的最新更新时间。下次请求时，如果文件缓存过期，浏览器通过If-Modified-Since字段带上这个时间，发送给服务器，由服务器比较时间戳来判断文件是否有修改。如果没有修改，服务器返回304告诉浏览器继续使用缓存；如果有修改，则返回200，同时返回最新的文件。
+</div>
+<div><br/></div>
+<div><b><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">Cache-Control通常与Last-Modified一起使用。一个用于控制缓存有效时间，一个在缓存失效后，向服务查询是否有更新。</span></b>
+</div>
+<div><br/></div>
+<div>Cache-Control还有一个同功能的字段：Expires。Expires的值一个绝对的时间点，如：Expires: Thu, 10 Nov 2015 08:45:11 GMT，表示在这个时间点之前，缓存都是有效的。
+</div>
+<div><br/></div>
+<div><s>Expires是HTTP1.0标准中的字段，Cache-Control是HTTP1.1标准中新加的字段，功能一样，都是控制缓存的有效时间。当这两个字段同时出现时，Cache-Control是高优化级的。</s></div>
+<div><br/></div>
+<div><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">Etag</span> 也是和 Last-Modified
+    一样，对文件进行标识的字段。不同的是，Etag
+    的取值是一个对文件进行标识的特征字串。在向服务器查询文件是否有更新时，浏览器通过If-None-Match字段把特征字串发送给服务器，由服务器和文件最新特征字串进行匹配，来判断文件是否有更新。没有更新回包304，有更新回包200。Etag和Last-Modified可根据需求使用一个或两个同时使用。两个同时使用时，只要满足基中一个条件，就认为文件没有更新。
+</div>
+<div><br/></div>
+<div>另外有两种特殊的情况：</div>
+<ul>
+    <li>手动刷新页面（F5)，浏览器会直接认为缓存已经过期（可能缓存还没有过期），在请求中加上字段：Cache-Control:max-age=0，发包向服务器查询是否有文件是否有更新。</li>
+    <li>强制刷新页面（Ctrl+F5)，浏览器会直接忽略本地的缓存（有缓存也会认为本地没有缓存），在请求中加上字段：Cache-Control:no-cache（或 Pragma:no-cache），发包向服务重新拉取文件。
+    </li>
+</ul>
+<div><br/></div>
+<div>下面是通过 Google Chrome  浏览器（用其他浏览器+抓包工具也可以）自带的开发者工具，对一个资源文件不同情况请求与回包的截图。</div>
+<div><br/></div>
+<div>首次请求：200</div>
+<div><br/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/Vh8bpPi.gif"
+        height="303" width="556"/></div>
+<div>缓存有效期内请求：200(from cache)</div>
+<div><br/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/q36bsW4.gif"
+        height="293" width="603"/></div>
+<div>缓存过期后请求：304（Not Modified)</div>
+<div><br/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/xKsdLUS.gif"
+        height="357" width="601"/></div>
+<div>一般浏览器会将缓存记录及缓存文件存在本地Cache文件夹中。Android下App如果使用Webview，缓存的文件记录及文件内容会存在当前App的Data目录中。</div>
+<div><br/></div>
+<div>分析：Cache-Control和Last-Modified一般用在Web的静态资源文件上，如JS、CSS
+    和一些图像文件。通过设置资源文件缓存属性，对提高资源文件加载速度，节省流量很有意义，特别是移动网络环境。但问题是：缓存有效时长该如何设置？如果设置太短，就起不到缓存的使用；如果设置的太长，在资源文件有更新时，浏览器如果有缓存，则不能及时取到最新的文件。
+</div>
+<div><br/></div>
+<div>
+    Last-Modified需要向服务器发起查询请求，才能知道资源文件有没有更新。虽然服务器可能返回304告诉没有更新，但也还有一个请求的过程。对于移动网络，这个请求可能是比较耗时的。有一种说法叫“消灭304”，指的就是优化掉304的请求。
+</div>
+<div><br/></div>
+<div>
+    抓包发现，带if-Modified-Since字段的请求，如果服务器回包304，回包带有Cache-Control:max-age或Expires字段，文件的缓存有效时间会更新，就是文件的缓存会重新有效。304回包后如果再请求，则又直接使用缓存文件了，不再向服务器查询文件是否更新了，除非新的缓存时间再次过期。
+</div>
+<div><br/></div>
+<div>另外，<span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">Cache-Control 与  Last-Modified 是浏览器内核的机制，一般都是标准的实现，不能更改或设置。</span>以QQ浏览器的X5为例，Cache-Control与Last-Modified缓存不能禁用。缓存容量是12MB，不分Host，过期的缓存会最先被清除。如果都没过期，应该优先清最早的缓存或最快到期的或文件大小最大的；过期缓存也有可能还是有效的，清除缓存会导致资源文件的重新拉取。
+</div>
+<div><br/></div>
+<div>还有，浏览器，如X5，在使用缓存文件时，是没有对缓存文件内容进行校验的，这样缓存文件内容被修改的可能。</div>
+<div><br/></div>
+<div>分析发现，浏览器的缓存机制还不是非常完美的缓存机制。完美的缓存机制应该是这样的：</div>
+<ol>
+    <li>缓存文件没更新，尽可能使用缓存，不用和服务器交互；</li>
+    <li>缓存文件有更新时，第一时间能使用到新的文件；</li>
+    <li>缓存的文件要保持完整性，不使用被修改过的缓存文件；</li>
+    <li>缓存的容量大小要能设置或控制，缓存文件不能因为存储空间限制或过期被清除。 以X5为例，第1、2条不能同时满足，第3、4条都不能满足。</li>
+</ol>
+<div><br/></div>
+<div><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">在实际应用中，为了解决Cache-Control缓存时长不好设置的问题，以及为了“消灭304”，Web前端采用的方式是：</span>
+</div>
+<ol>
+    <li><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">在要缓存的资源文件名中加上版本号或文件MD5值字串，如common.d5d02a02.js、common.v1.js，同时设置Cache-Control:max-age=31536000，也就是一年。在一年时间内，资源文件如果本地有缓存，就会使用缓存；也就不会有304的回包。</span>
+    </li>
+    <li><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">如果资源文件有修改，则更新文件内容，同时修改资源文件名，如common.v2.js，html页面也会引用新的资源文件名。</span>
+    </li>
+</ol>
+<div><br/></div>
+<div>通过这种方式，实现了：缓存文件没有更新，则使用缓存；缓存文件有更新，则第一时间使用最新文件的目的。即上面说的第1、2条。第3、4条由于浏览器内部机制，目前还无法满足。</div>
+<div><br/></div>
+<div>
+    <hr/>
+</div>
+<div><br/></div>
+<div><span style="font-size: 18px;"><b>2.2 Dom Storage存储机制</b></span></div>
+<div><br/></div>
+<div>DOM存储是一套在Web Applications 1.0规范中首次引入的与存储相关的特性的总称，现在已经分离出来，单独发展成为独立的W3C
+    Web存储规范。DOM存储被设计为用来提供一个更大存储量、更安全、更便捷的存储方法，从而可以代替掉将一些不需要让服务器知道的信息存储到Cookies里的这种传统方法。
+</div>
+<div><br/></div>
+<div>上面一段是对Dom Storage存储机制的官方表述。看起来，Dom Storage机制类似Cookies，但有一些优势。</div>
+<div><br/></div>
+<div>Dom Storage是通过存储字符串的Key/Value对来提供的，并提供5MB（不同浏览器可能不同，分Host）的存储空间（Cookies才4KB)。另外Dom Storage存储的数据在本地，不像
+    Cookies，每次请求一次页面，Cookies 都会发送给服务器。
+</div>
+<div><br/></div>
+<div>DOM Storage分为sessionStorage和localStorage。localStorage对象和sessionStorage对象使用方法基本相同，它们的区别在于作用的范围不同。</div>
+<div><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">sessionStorage用来存储与页面相关的数据，它在页面关闭后无法使用。而localStorage则持久存在，在页面关闭后也可以使用。</span>
+</div>
+<div><br/></div>
+<div>Dom Storage提供了以下的存储接口：</div>
+<div><br/></div>
+<div>interface Storage {<br/>
+    readonly attribute unsigned long length;<br/>
+    [IndexGetter] DOMString key(in unsigned long index);<br/>
+    [NameGetter] DOMString getItem(in DOMString key);<br/>
+    [NameSetter] void setItem(in DOMString key, in DOMString data);<br/>
+    [NameDeleter] void removeItem(in DOMString key);<br/>
+    void clear();<br/>
+    };&lt;br&gt;</div>
+<div><br/></div>
+<div><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;"><b>sessionStorage</b></span>是个全局对象，它维护着在页面会话（page
+    session）期间有效的存储空间。只要浏览器开着，页面会话周期就会一直持续。当页面重新载入（reload）或者被恢复（restores）时，页面会话也是一直存在的。每在新标签或者新窗口中打开一个新页面，都会初始化一个新的会话。
+</div>
+<div><br/></div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#e8bf6a;">&lt;script </span><span style="color:#bababa;">type=</span><span
+            style="color:#a5c261;">"text/javascript"</span><span style="color:#e8bf6a;">&gt;<br/></span><span
+            style="color:#e8bf6a;">   </span> <span
+            style="color:#808080;">// 当页面刷新时，从sessionStorage恢复之前输入的内容<br/></span><span style="color:#808080;">   </span>
+        <span style="color:#9876aa;">window</span>.<span style="color:#ffc66d;">onload </span>= <span
+                style="color:#cc7832;font-weight:bold;">function </span>() {<br/>
+                <span style="color:#cc7832;font-weight:bold;">if </span>(<span
+                style="color:#9876aa;">window</span>.<span style="color:#9876aa;">sessionStorage</span>) {<br/>
+                    <span style="color:#cc7832;font-weight:bold;">var </span>name = <span
+                style="color:#9876aa;">window</span>.<span style="color:#9876aa;">sessionStorage</span>.<span
+                style="color:#ffc66d;">getItem</span>(<span style="color:#6a8759;">"name"</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> <span
+                style="color:#cc7832;font-weight:bold;">if </span>(name != <span style="color:#6a8759;">"" </span>|| name != <span
+                style="color:#cc7832;font-weight:bold;">null</span>) {<br/>
+                        <span style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">getElementById</span>(<span
+                style="color:#6a8759;">"name"</span>).<span style="color:#9876aa;">value </span>= name<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> }<br/>
+                }<br/>
+            }<span style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> <span
+                style="color:#808080;">// 将数据保存到sessionStorage对象中<br/></span><span style="color:#808080;">   </span>
+        <span style="color:#cc7832;font-weight:bold;">function </span><span style="color:#ffc66d;">saveToStorage</span>() {<br/>
+                <span style="color:#cc7832;font-weight:bold;">if </span>(<span
+                style="color:#9876aa;">window</span>.<span style="color:#9876aa;">sessionStorage</span>) {<br/>
+                    <span style="color:#cc7832;font-weight:bold;">var </span>name = <span style="color:#9876aa;">document</span>.<span
+                style="color:#ffc66d;">getElementById</span>(<span style="color:#6a8759;">"name"</span>).<span
+                style="color:#9876aa;">value</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span style="color:#9876aa;">window</span>.<span
+                style="color:#9876aa;">sessionStorage</span>.<span style="color:#ffc66d;">setItem</span>(<span
+                style="color:#6a8759;">"name"</span><span style="color:#cc7832;">, </span>name)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> <span
+                style="color:#9876aa;">window</span>.<span style="color:#9876aa;">location</span>.<span
+                style="color:#9876aa;">href </span>= <span style="color:#6a8759;">"session_storage.html"</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> }<br/>
+            }<br/>
+        <span style="color:#e8bf6a;">&lt;/script&gt;<br/></span><span style="color:#e8bf6a;">&lt;form </span><span
+                style="color:#bababa;">action=</span><span style="color:#a5c261;">"./session_storage.html"</span><span
+                style="color:#e8bf6a;">&gt;<br/></span><span style="color:#e8bf6a;">    &lt;input </span><span
+                style="color:#bababa;">type=</span><span style="color:#a5c261;">"text" </span><span
+                style="color:#bababa;">name=</span><span style="color:#a5c261;">"name" </span><span
+                style="color:#bababa;">id=</span><span style="color:#a5c261;">"name"</span><span style="color:#e8bf6a;">/&gt;<br/></span><span
+                style="color:#e8bf6a;">    &lt;input </span><span style="color:#bababa;">type=</span><span
+                style="color:#a5c261;">"button" </span><span style="color:#bababa;">value=</span><span
+                style="color:#a5c261;">"Save" </span><span style="color:#bababa;">onclick=</span><span
+                style="color:#a5c261;">"</span><span style="color:#ffc66d;">saveToStorage</span>()<span
+                style="color:#a5c261;">"</span><span style="color:#e8bf6a;">/&gt;<br/></span><span
+                style="color:#e8bf6a;">&lt;/form&gt;</span><br/></div>
+</div>
+<div><br/></div>
+<div>当浏览器被意外刷新的时候，一些临时数据应当被保存和恢复。sessionStorage对象在处理这种情况的时候是最有用的，比如恢复我们在表单中已经填写的数据。</div>
+<div><br/></div>
+<div>把上面的代码复制到session_storage.html（也可以从附件中直接下载）页面中，用Google
+    Chrome浏览器的不同Page或Window打开，在输入框中分别输入不同的文字，再点击“Save”，然后分别刷新。每个Page或Window显示都是当前Page输入的内容，互不影响。关闭Page，再重新打开，上一次输入保存的内容已经没有了。
+</div>
+<div><br/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/F3p7KoF.gif"
+        height="160" width="640"/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/FTSyNzK.gif"
+        height="156" width="640"/></div>
+<div><b><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">Local Storage</span></b>的接口、用法与Session
+    Storage一样，唯一不同的是：Local Storage保存的数据是持久性的。当前Page关闭（Page Session结束后），保存的数据依然存在。重新打开Page，上次保存的数据可以获取到。另外，Local
+    Storage是全局性的，同时打开两个Page会共享一份存数据，在一个Page中修改数据，另一个Page中是可以感知到的。
+</div>
+<div><br/></div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#e8bf6a;">&lt;script&gt;<br/></span><span style="color:#e8bf6a;">   </span> <span
+            style="color:#808080;">//通过localStorage直接引用key, 另一种写法，等价于：<br/></span><span style="color:#808080;">    //localStorage.getItem("pageLoadCount");<br/></span><span
+            style="color:#808080;">    //localStorage.setItem("pageLoadCount", value);<br/></span><span
+            style="color:#808080;">   </span> <span style="color:#cc7832;font-weight:bold;">if </span>(!<span
+            style="color:#9876aa;">localStorage</span>.<span style="color:#9876aa;">pageLoadCount</span>)<br/>
+                <span style="color:#9876aa;">localStorage</span>.<span
+                style="color:#9876aa;">pageLoadCount </span>= <span style="color:#6897bb;">0</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> <span
+                style="color:#9876aa;">localStorage</span>.<span style="color:#9876aa;">pageLoadCount </span>= <span
+                style="color:#ffc66d;">parseInt</span>(<span style="color:#9876aa;">localStorage</span>.<span
+                style="color:#9876aa;">pageLoadCount</span>) + <span style="color:#6897bb;">1</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> <span
+                style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">getElementById</span>(<span
+                style="color:#6a8759;">'count'</span>).<span style="color:#9876aa;">textContent </span>= <span
+                style="color:#9876aa;">localStorage</span>.<span style="color:#9876aa;">pageLoadCount</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#e8bf6a;">&lt;/script&gt;<br/></span><span
+                style="color:#e8bf6a;">&lt;p&gt;<br/></span><span style="color:#e8bf6a;">   </span>
+        You have viewed this page<br/>
+            <span style="color:#e8bf6a;">&lt;span </span><span style="color:#bababa;">id=</span><span
+                style="color:#a5c261;">"count"</span><span style="color:#e8bf6a;">&gt;</span>an untold number of<span
+                style="color:#e8bf6a;">&lt;/span&gt;<br/></span><span style="color:#e8bf6a;">   </span> time(s).<br/>
+        <span style="color:#e8bf6a;">&lt;/p&gt;</span><br/></div>
+</div>
+<div><br/></div>
+<div>将上面代码复制到local_storage.html的页面中，用浏览器打开，pageLoadCount的值是1；关闭Page重新打开，pageLoadCount的值是2。这是因为第一次的值已经保存了。</div>
+<div><br/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/gX0nhDe.gif"
+        height="174" width="640"/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/VsSJUCN.gif"
+        height="174" width="640"/></div>
+<div>用两个Page同时打开local_storage.html，并分别交替刷新，发现两个Page是共享一个pageLoadCount的。</div>
+<div><br/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/K3d9gc0.gif"
+        height="172" width="640"/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/cWePbMp.gif"
+        height="167" width="640"/></div>
+<div>分析：Dom Storage给Web提供了一种更录活的数据存储方式，存储空间更大（相对Cookies），用法也比较简单，方便存储服务器或本地的一些临时数据。</div>
+<div><br/></div>
+<div>从Dom Storage提供的接口来看，Dom
+    Storage适合存储比较简单的数据，如果要存储结构化的数据，可能要借助JSON了，将要存储的对象转为JSON字串。不太适合存储比较复杂或存储空间要求比较大的数据，也不适合存储静态的文件等。
+</div>
+<div><br/></div>
+<div>
+    <hr/>
+</div>
+<div><br/></div>
+<div><span style="font-size: 18px;"><b>2.3 Web SQL Database存储机制（不再推荐使用）</b></span></div>
+<div><br/></div>
+<div>HTML5也提供基于SQL的数据库存储机制，用于存储适合数据库的结构化数据。根据官方的标准文档，Web SQL Database存储机制不再推荐使用，将来也不再维护，而是推荐使用AppCache和IndexedDB。</div>
+<div><br/></div>
+<div>现在主流的浏览器都还是支持Web SQL Database存储机制的。Web SQL Database存储机制提供了一组API供Web App创建、存储、查询数据库。</div>
+<div><br/></div>
+<div>下面通过简单的例子，演示下Web SQL Database的使用。</div>
+<div><br/></div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#e8bf6a;">&lt;script&gt;<br/></span><span style="color:#e8bf6a;">   </span> <span
+            style="color:#cc7832;font-weight:bold;">if </span>(<span style="color:#9876aa;">window</span>.<span
+            style="color:#ffc66d;">openDatabase</span>) {<br/>
+                <span style="color:#808080;">//打开数据库，如果没有则创建<br/></span><span style="color:#808080;">       </span>
+        <span style="color:#cc7832;font-weight:bold;">var </span>db = <span
+                style="color:#ffc66d;">openDatabase</span>(<span style="color:#6a8759;">'mydb'</span><span
+                style="color:#cc7832;">, </span><span style="color:#6a8759;">'1.0'</span><span
+                style="color:#cc7832;">, </span><span style="color:#6a8759;">'Test DB'</span><span
+                style="color:#cc7832;">, </span><span style="color:#6897bb;">2 </span>* <span style="color:#6897bb;">1024</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#808080;">//通过事务，创建一个表，并添加两条记录<br/></span><span style="color:#808080;">       </span>
+        db.<span style="color:#ffc66d;">transaction</span>(<span
+                style="color:#cc7832;font-weight:bold;">function </span>(tx) {<br/>
+                    tx.<span style="color:#ffc66d;">executeSql</span>(<span style="color:#6a8759;">'CREATE TABLE IF NOT EXISTS LOGS (id unique, log)'</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> tx.<span
+                style="color:#ffc66d;">executeSql</span>(<span style="color:#6a8759;">'INSERT INTO LOGS (id, log) VALUES (1, "foobar")'</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> tx.<span
+                style="color:#ffc66d;">executeSql</span>(<span style="color:#6a8759;">'INSERT INTO LOGS (id, log) VALUES (2, "logmsg")'</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> })<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#808080;">//查询表中所有记录，并展示出来<br/></span><span style="color:#808080;">       </span> db.<span
+                style="color:#ffc66d;">transaction</span>(<span style="color:#cc7832;font-weight:bold;">function </span>(tx) {<br/>
+                    tx.<span style="color:#ffc66d;">executeSql</span>(<span
+                style="color:#6a8759;">'SELECT * FROM LOGS'</span><span style="color:#cc7832;">, </span>[]<span
+                style="color:#cc7832;">, </span><span style="color:#cc7832;font-weight:bold;">function </span>(tx<span
+                style="color:#cc7832;">, </span>results) {<br/>
+                        <span style="color:#cc7832;font-weight:bold;">var </span>len = results.<span
+                style="color:#9876aa;">rows</span>.<span style="color:#9876aa;">length</span><span
+                style="color:#cc7832;">, </span>i<span style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">               </span>
+        <span style="color:#9876aa;">msg </span>= <span
+                style="color:#6a8759;">"&lt;p&gt;Found rows: " </span>+ len + <span
+                style="color:#6a8759;">"&lt;/p&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">               </span> <span style="color:#cc7832;font-weight:bold;">for </span>(i = <span
+                style="color:#6897bb;">0</span><span style="color:#cc7832;">; </span>i &lt; len<span
+                style="color:#cc7832;">; </span>i++) {<br/>
+                            <span style="color:#9876aa;">msg </span>+= <span style="color:#6a8759;">"&lt;p&gt;" </span>+ results.<span
+                style="color:#9876aa;">rows</span>.<span style="color:#ffc66d;">item</span>(i).<span
+                style="color:#ffc66d;">log </span>+ <span style="color:#6a8759;">"&lt;/p&gt;"</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">               </span> }<br/>
+                        <span style="color:#9876aa;">document</span>.<span
+                style="color:#ffc66d;">querySelector</span>(<span style="color:#6a8759;">'#status'</span>).<span
+                style="color:#9876aa;">innerHTML </span>= <span style="color:#9876aa;">msg</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> }<span
+                style="color:#cc7832;">, </span><span style="color:#cc7832;font-weight:bold;">null</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> })<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> }<br/>
+        <span style="color:#e8bf6a;">&lt;/script&gt;<br/></span><span style="color:#e8bf6a;">&lt;div </span><span
+                style="color:#bababa;">id=</span><span style="color:#a5c261;">"status" </span><span
+                style="color:#bababa;">name=</span><span style="color:#a5c261;">"status"</span><span
+                style="color:#e8bf6a;">&gt;</span>Status Message<span style="color:#e8bf6a;">&lt;/div&gt;</span><br/>
+    </div>
+</div>
+<div><br/></div>
+<div>将上面代码复制到sql_database.html中，用浏览器打开，可看到下面的内容。</div>
+<div><br/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/ZSA5PB2.gif"
+        height="237" width="640"/></div>
+<div>官方建议浏览器在实现时，对每个Host的数据库存储空间作一定限制，建议默认是5MB（分Host）的配额；达到上限后，可以申请更多存储空间。另外，现在主流浏览器SQL Database的实现都是基于SQLite。</div>
+<div><br/></div>
+<div>分析：SQL Database的主要优势在于能够存储结构复杂的数据，能充分利用数据库的优势，可方便对数据进行增加、删除、修改、查询。由于SQL语法的复杂性，使用起来麻烦一些。SQL Database也不太适合做静态文件的缓存。
+</div>
+<div><br/></div>
+<div>
+    <hr/>
+</div>
+<div><br/></div>
+<div><span style="font-size: 18px;"><b>2.4 Application Cache机制（不推荐使用）</b></span></div>
+<div><br/></div>
+<div>Application Cache（简称AppCache）似乎是为支持Web
+    App离线使用而开发的缓存机制。它的缓存机制类似于浏览器的缓存（Cache-Control和Last-Modified）机制，都是以文件为单位进行缓存，且文件有一定更新机制。但AppCache是对浏览器缓存机制的补充，不是替代。
+</div>
+<div><br/></div>
+<div>先拿W3C官方的一个例子，说下AppCache机制的用法与功能。</div>
+<div><br/></div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#e8bf6a;">&lt;!DOCTYPE </span><span style="color:#bababa;">html</span><span
+            style="color:#e8bf6a;">&gt;<br/></span><span
+            style="background-color: rgb(255, 250, 165);-evernote-highlight:true;"><u><b><span style="color:#e8bf6a;">&lt;html </span><span
+            style="color:#bababa;">manifest=</span><span
+            style="color:#a5c261;">"demo_html.appcache"</span></b></u></span><span style="color:#e8bf6a;"><span
+            style="background-color: rgb(255, 250, 165);-evernote-highlight:true;"><u><b>&gt;</b></u></span><br/></span><span
+            style="color:#e8bf6a;">&lt;body&gt;<br/></span><span style="color:#e8bf6a;">&lt;script </span><span
+            style="color:#bababa;">src=</span><span style="color:#a5c261;">"demo_time.js"</span><span
+            style="color:#e8bf6a;">&gt;&lt;/script&gt;<br/></span><span style="color:#e8bf6a;">&lt;p </span><span
+            style="color:#bababa;">id=</span><span style="color:#a5c261;">"timePara"</span><span style="color:#e8bf6a;">&gt;<br/></span><span
+            style="color:#e8bf6a;">    &lt;button </span><span style="color:#bababa;">onclick=</span><span
+            style="color:#a5c261;">"</span>getDateTime()<span style="color:#a5c261;">"</span><span
+            style="color:#e8bf6a;">&gt;</span>Get Date and Time<span
+            style="color:#e8bf6a;">&lt;/button&gt;<br/></span><span style="color:#e8bf6a;">&lt;/p&gt;<br/></span><span
+            style="color:#e8bf6a;">&lt;p&gt;&lt;img </span><span style="color:#bababa;">src=</span><span
+            style="color:#a5c261;">"img_logo.gif" </span><span style="color:#bababa;">width=</span><span
+            style="color:#a5c261;">"336" </span><span style="color:#bababa;">height=</span><span style="color:#a5c261;">"69"</span><span
+            style="color:#e8bf6a;">&gt;&lt;/p&gt;<br/></span><span style="color:#e8bf6a;"><br/></span><span
+            style="color:#e8bf6a;">&lt;p&gt;<br/></span><span style="color:#e8bf6a;">   </span> Try opening<span
+            style="color:#e8bf6a;">&lt;a </span><span style="color:#bababa;">href=</span><span style="color:#a5c261;">"tryhtml5_html_manifest.htm" </span><span
+            style="color:#bababa;">target=</span><span style="color:#a5c261;">"_blank"</span><span
+            style="color:#e8bf6a;">&gt;</span>this page<span style="color:#e8bf6a;">&lt;/a&gt;</span>, then go offline, and reload the page.The script and the image should still work.<br/>
+        <span style="color:#e8bf6a;">&lt;/p&gt;<br/></span><span style="color:#e8bf6a;">&lt;/body&gt;<br/></span><span
+                style="color:#e8bf6a;">&lt;/html&gt;</span><br/></div>
+</div>
+<div><br/></div>
+<div>上面HTML文档，引用外部一个JS文件和一个GIF图片文件，在其HTML头中通过manifest属性引用了一个appcache结尾的文件。</div>
+<div><br/></div>
+<div>我们在Google
+    Chrome浏览器中打开这个HTML链接，JS功能正常，图片也显示正常。禁用网络，关闭浏览器重新打开这个链接，发现JS工作正常，图片也显示正常。当然也有可能是浏览缓存起的作用，我们可以在文件的浏览器缓存过期后，禁用网络再试，发现HTML页面也是正常的。
+</div>
+<div><br/></div>
+<div>通过Google Chrome浏览器自带的工具，我们可以查看已经缓存的AppCache（分Host）。</div>
+<div><br/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/hq9dR63.gif"
+        height="392" width="640"/></div>
+<div>上面截图中的缓存，就是我们刚才打开HTML的页面AppCache。从截图中看，HTML页面及HTML引用的JS、GIF图像文件都被缓存了；</div>
+<div>另外HTML头中manifest属性引用的appcache文件也缓存了。</div>
+<div><br/></div>
+<div>AppCache的原理有两个关键点：manifest属性和manifest文件。</div>
+<div><br/></div>
+<div>HTML在头中通过manifest属性引用manifest文件。</div>
+<div><br/></div>
+<div><b><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">manifest文件</span></b>，就是上面以appcache结尾的文件，是一个普通文件文件，列出了需要缓存的文件。
+</div>
+<div><br/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/bMFTDmR.gif"
+        height="182" width="640"/></div>
+<div>上面截图中的manifest文件，就HTML代码引用的manifest文件。</div>
+<div>文件比较简单，第一行是关键字，第二、三行就是要缓存的文件路径（相对路径）。</div>
+<div>这只是最简单的manifest文件，完整的还包括其他关键字与内容。</div>
+<div>引用manifest文件的HTML和manifest文件中列出的要缓存的文件最终都会被浏览器缓存。</div>
+<div><br/></div>
+<div>完整的manifest文件，包括三个Section，类型Windows中ini配置文件的Section，不过不要中括号。</div>
+<ol>
+    <li>CACHE MANIFEST - Files listed under this header will be cached after they are downloaded for the first time</li>
+    <li>NETWORK - Files listed under this header require a connection to the server, and will <span
+            style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">never be cached</span></li>
+    <li>FALLBACK - Files listed under this header specifies fallback pages if a page is inaccessible</li>
+</ol>
+<div>完整的manifest文件，如：</div>
+<div><br/></div>
+<div>CACHE MANIFEST<br/>
+    # 2012-02-21 v1.0.0<br/>
+    /theme.css<br/>
+    /logo.gif<br/>
+    /main.js<br/>
+    NETWORK:<br/>
+    login.asp<br/>
+    FALLBACK:<br/>
+    /html/ /offline.html &lt;br&gt;</div>
+<div><br/></div>
+<div>总的来说，浏览器在首次加载HTML文件时，会解析manifest属性，并读取manifest文件，获取Section:CACHE MANIFEST下要缓存的文件列表，再对文件缓存。</div>
+<div><br/></div>
+<div>AppCache的缓存文件，与浏览器的缓存文件分开存储。</div>
+<div><br/></div>
+<div>AppCache在首次加载生成后，也有更新机制。<span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">被缓存的文件如果要更新，需要更新manifest文件。</span>因为浏览器在下次加载时，除了会默认使用缓存外，还会在后台检查manifest文件有没有修改（byte
+    by byte)。发现有修改，就会重新获取manifest文件，对Section:CACHE MANIFEST下文件列表检查更新。manifest文件与缓存文件的检查更新也遵守浏览器缓存机制。
+</div>
+<div><br/></div>
+<div>如用用户手动清了AppCache缓存，下次加载时，浏览器会重新生成缓存，也可算是一种缓存的更新。另外，Web App也可用代码实现缓存更新。</div>
+<div><br/></div>
+<div>分析：AppCache看起来是一种比较好的缓存方法，除了缓存静态资源文件外，也适合构建Web离线 App。在实际使用中有些需要注意的地方，有一些可以说是”坑“。</div>
+<ol>
+    <li>要更新缓存的文件，需要更新包含它的manifest文件，那怕只加一个空格。常用的方法，是修改manifest文件注释中的版本号。如：# 2012-02-21 v1.0.0；</li>
+    <li>被缓存的文件，浏览器是先使用，再通过检查manifest文件是否有更新来更新缓存文件。这样缓存文件可能用的不是最新的版本。</li>
+    <li><span
+            style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">在更新缓存过程中，如果有一个文件更新失败，则整个更新会失败。</span>
+    </li>
+    <li><span
+            style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">manifest 和引用它的 HTML 要在相同 Host。</span>
+    </li>
+    <li>manifest文件中的文件列表，如果是相对路径，则是<span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">相对manifest文件的相对路径。</span>
+    </li>
+    <li>manifest也有可能更新出错，导致缓存文件更新失败。</li>
+    <li>没有缓存的资源在已经缓存的HTML中不能加载，即使有网络。例如：http://appcache-demo.s3-website-us-east-1.amazonaws.com/without-network/。</li>
+    <li>manifest文件本身不能被缓存，且manifest文件的更新使用的是浏览器缓存机制。所以manifest文件的Cache-Control缓存时间不能设置太长。</li>
+</ol>
+<div><br/></div>
+<div>另外，根据官方文档，AppCache已经不推荐使用了，标准也不会再支持。现在主流的浏览器都是还支持AppCache的，以后就不太确定了。</div>
+<div><br/></div>
+<div>
+    <hr/>
+</div>
+<div><br/></div>
+<div><span style="font-size: 18px;"><b>2.5 Indexed Database</b></span></div>
+<div><br/></div>
+<div>IndexedDB也是一种数据库的存储机制，但不同于已经不再支持的Web SQL Database。IndexedDB不是传统的关系数据库，可归为NoSQL数据库。IndexedDB又类似于Dom
+    Storage的key-value的存储方式，但功能更强大，且存储空间更大。
+</div>
+<div><br/></div>
+<div>IndexedDB存储数据是key-value的形式。Key是必需，且要唯一；Key可以自己定义，也可由系统自动生成。Value也是必需的，但Value非常灵活，可以是任何类型的对象。一般Value都是通过Key来存取的。
+</div>
+<div><br/></div>
+<div>IndexedDB提供了一组API，可以进行数据存、取以及遍历。这些API都是异步的，操作的结果都是在回调中返回。</div>
+<div><br/></div>
+<div>下面代码演示了IndexedDB中DB的打开（创建）、存储对象（可理解成有关系数据的“表”）的创建及数据存取、遍历基本功能。</div>
+<div><br/></div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#e8bf6a;">&lt;script </span><span style="color:#bababa;">type=</span><span
+            style="color:#a5c261;">"text/javascript"</span><span style="color:#e8bf6a;">&gt;<br/></span><span
+            style="color:#e8bf6a;">   </span> <span style="color:#cc7832;font-weight:bold;">var </span>db<span
+            style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> <span style="color:#9876aa;">window</span>.<span
+            style="color:#9876aa;">indexedDB </span>= <span style="color:#9876aa;">window</span>.<span
+            style="color:#9876aa;">indexedDB </span>|| <span style="color:#9876aa;">window</span>.mozIndexedDB || <span
+            style="color:#9876aa;">window</span>.webkitIndexedDB || <span style="color:#9876aa;">window</span>.msIndexedDB<span
+            style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> <span style="color:#808080;">//浏览器是否支持IndexedDB<br/></span><span
+            style="color:#808080;">   </span> <span style="color:#cc7832;font-weight:bold;">if </span>(<span
+            style="color:#9876aa;">window</span>.<span style="color:#9876aa;">indexedDB</span>) {<br/>
+                <span style="color:#808080;">//打开数据库，如果没有，则创建<br/></span><span style="color:#808080;">       </span>
+        <span style="color:#cc7832;font-weight:bold;">var </span>openRequest = <span
+                style="color:#9876aa;">window</span>.<span style="color:#9876aa;">indexedDB</span>.<span
+                style="color:#ffc66d;">open</span>(<span style="color:#6a8759;">"people_db"</span><span
+                style="color:#cc7832;">, </span><span style="color:#6897bb;">1</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#808080;">//DB版本设置或升级时回调<br/></span><span style="color:#808080;">       </span>
+        openRequest.<span style="color:#ffc66d;">onupgradeneeded </span>= <span style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                    <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">"Upgrading..."</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span style="color:#cc7832;font-weight:bold;">var </span>thisDB = e.<span
+                style="color:#ffc66d;">target</span>.<span style="color:#9876aa;">result</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> <span
+                style="color:#cc7832;font-weight:bold;">if </span>(!thisDB.objectStoreNames.<span
+                style="color:#ffc66d;">contains</span>(<span style="color:#6a8759;">"people"</span>)) {<br/>
+                        <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">"Create Object Store: people."</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">               </span> <span
+                style="color:#808080;">//创建存储对象，类似于关系数据库的表<br/></span><span
+                style="color:#808080;">               </span> thisDB.createObjectStore(<span style="color:#6a8759;">"people"</span><span
+                style="color:#cc7832;">, </span>{<span style="color:#9876aa;">autoIncrement</span>: <span
+                style="color:#cc7832;font-weight:bold;">true</span>})<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">               </span> <span
+                style="color:#808080;">//创建存储对象， 还创建索引<br/></span><span style="color:#808080;">                //var objectStore = thisDB.createObjectStore("people",{ autoIncrement:true });<br/></span><span
+                style="color:#808080;">                // //first arg is name of index, second is the path (col);<br/></span><span
+                style="color:#808080;">                //objectStore.createIndex("name","name", {unique:false});<br/></span><span
+                style="color:#808080;">                //objectStore.createIndex("email","email", {unique:true});<br/></span><span
+                style="color:#808080;">           </span> }<br/>
+                }<span style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#808080;">//DB成功打开回调<br/></span><span style="color:#808080;">       </span>
+        openRequest.<span style="color:#ffc66d;">onsuccess </span>= <span style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                    <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">"Success!"</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span
+                style="color:#808080;">//保存全局的数据库对象，后面会用到<br/></span><span style="color:#808080;">           </span>
+        db = e.<span style="color:#ffc66d;">target</span>.<span style="color:#9876aa;">result</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> <span
+                style="color:#808080;">//绑定按钮点击事件<br/></span><span style="color:#808080;">           </span> <span
+                style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">querySelector</span>(<span
+                style="color:#6a8759;">"#addButton"</span>).<span style="color:#ffc66d;">addEventListener</span>(<span
+                style="color:#6a8759;">"click"</span><span style="color:#cc7832;">, </span><span style="color:#ffc66d;">addPerson</span><span
+                style="color:#cc7832;">, </span><span style="color:#cc7832;font-weight:bold;">false</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> <span
+                style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">querySelector</span>(<span
+                style="color:#6a8759;">"#getButton"</span>).<span style="color:#ffc66d;">addEventListener</span>(<span
+                style="color:#6a8759;">"click"</span><span style="color:#cc7832;">, </span><span style="color:#ffc66d;">getPerson</span><span
+                style="color:#cc7832;">, </span><span style="color:#cc7832;font-weight:bold;">false</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> <span
+                style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">querySelector</span>(<span
+                style="color:#6a8759;">"#getAllButton"</span>).<span
+                style="color:#ffc66d;">addEventListener</span>(<span style="color:#6a8759;">"click"</span><span
+                style="color:#cc7832;">, </span><span style="color:#ffc66d;">getPeople</span><span
+                style="color:#cc7832;">, </span><span style="color:#cc7832;font-weight:bold;">false</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> <span
+                style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">querySelector</span>(<span
+                style="color:#6a8759;">"#getByName"</span>).<span style="color:#ffc66d;">addEventListener</span>(<span
+                style="color:#6a8759;">"click"</span><span style="color:#cc7832;">, </span><span style="color:#ffc66d;">getPeopleByNameIndex1</span><span
+                style="color:#cc7832;">, </span><span style="color:#cc7832;font-weight:bold;">false</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> }<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#808080;">//DB打开失败回调<br/></span><span style="color:#808080;">       </span>
+        openRequest.<span style="color:#ffc66d;">onerror </span>= <span style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                    <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">"Error"</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span style="color:#9876aa;">console</span>.<span
+                style="color:#ffc66d;">dir</span>(e)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> }<br/>
+            } <span style="color:#cc7832;font-weight:bold;">else </span>{<br/>
+                <span style="color:#ffc66d;">alert</span>(<span style="color:#6a8759;">'Sorry! Your browser doesn</span><span
+                style="color:#cc7832;">\'</span><span style="color:#6a8759;">t support the IndexedDB.'</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> }<br/>
+            <span style="color:#808080;">//添加一条记录<br/></span><span style="color:#808080;">   </span> <span
+                style="color:#cc7832;font-weight:bold;">function </span><span style="color:#ffc66d;">addPerson</span>(e) {<br/>
+                <span style="color:#cc7832;font-weight:bold;">var </span>name = <span
+                style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">querySelector</span>(<span
+                style="color:#6a8759;">"#name"</span>).<span style="color:#9876aa;">value</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#cc7832;font-weight:bold;">var </span>email = <span style="color:#9876aa;">document</span>.<span
+                style="color:#ffc66d;">querySelector</span>(<span style="color:#6a8759;">"#email"</span>).<span
+                style="color:#9876aa;">value</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#9876aa;">console</span>.<span
+                style="color:#ffc66d;">log</span>(<span style="color:#6a8759;">"About to add " </span>+ name + <span
+                style="color:#6a8759;">"/" </span>+ email)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#cc7832;font-weight:bold;">var </span>transaction = db.<span
+                style="color:#ffc66d;">transaction</span>([<span style="color:#6a8759;">"people"</span>]<span
+                style="color:#cc7832;">, </span><span style="color:#6a8759;">"readwrite"</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#cc7832;font-weight:bold;">var </span>store = transaction.objectStore(<span
+                style="color:#6a8759;">"people"</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#808080;">//Define a person<br/></span><span
+                style="color:#808080;">       </span> <span style="color:#cc7832;font-weight:bold;">var </span>person = {<br/>
+                    <span style="color:#9876aa;">name</span>: name<span style="color:#cc7832;">,<br/></span><span
+                style="color:#cc7832;">           </span> <span style="color:#9876aa;">email</span>: email<span
+                style="color:#cc7832;">,<br/></span><span style="color:#cc7832;">           </span> <span
+                style="color:#9876aa;">created</span>: <span
+                style="color:#cc7832;font-weight:bold;">new </span>Date()<br/>
+                }<span style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#808080;">//Perform the add<br/></span><span style="color:#808080;">       </span> <span
+                style="color:#cc7832;font-weight:bold;">var </span>request = store.<span
+                style="color:#ffc66d;">add</span>(person)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#808080;">//var request = store.put(person, 2);<br/></span><span
+                style="color:#808080;">       </span> request.<span style="color:#ffc66d;">onerror </span>= <span
+                style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                    <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">"Error"</span><span style="color:#cc7832;">, </span>e.<span
+                style="color:#ffc66d;">target</span>.<span style="color:#ffc66d;">error</span>.<span
+                style="color:#ffc66d;">name</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span style="color:#808080;">//some type of error handler<br/></span><span
+                style="color:#808080;">       </span> }<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> request.<span style="color:#ffc66d;">onsuccess </span>= <span
+                style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                    <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">"Woot! Did it."</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> }<br/>
+            }<br/>
+            <span style="color:#808080;">//通过KEY查询记录<br/></span><span style="color:#808080;">   </span> <span
+                style="color:#cc7832;font-weight:bold;">function </span><span style="color:#ffc66d;">getPerson</span>(e) {<br/>
+                <span style="color:#cc7832;font-weight:bold;">var </span>key = <span
+                style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">querySelector</span>(<span
+                style="color:#6a8759;">"#key"</span>).<span style="color:#9876aa;">value</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#cc7832;font-weight:bold;">if </span>(key === <span
+                style="color:#6a8759;">"" </span>|| <span style="color:#ffc66d;">isNaN</span>(key)) <span
+                style="color:#cc7832;font-weight:bold;">return</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#cc7832;font-weight:bold;">var </span>transaction = db.<span
+                style="color:#ffc66d;">transaction</span>([<span style="color:#6a8759;">"people"</span>]<span
+                style="color:#cc7832;">, </span><span style="color:#6a8759;">"readonly"</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#cc7832;font-weight:bold;">var </span>store = transaction.objectStore(<span
+                style="color:#6a8759;">"people"</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#cc7832;font-weight:bold;">var </span>request = store.<span
+                style="color:#ffc66d;">get</span>(Number(key))<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> request.<span style="color:#ffc66d;">onsuccess </span>= <span
+                style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                    <span style="color:#cc7832;font-weight:bold;">var </span>result = e.<span style="color:#ffc66d;">target</span>.<span
+                style="color:#9876aa;">result</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span style="color:#9876aa;">console</span>.<span
+                style="color:#ffc66d;">dir</span>(result)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span style="color:#cc7832;font-weight:bold;">if </span>(result) {<br/>
+                        <span style="color:#cc7832;font-weight:bold;">var </span>s = <span style="color:#6a8759;">"&lt;p&gt;&lt;h2&gt;Key " </span>+ key + <span
+                style="color:#6a8759;">"&lt;/h2&gt;&lt;/p&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">               </span> <span style="color:#cc7832;font-weight:bold;">for </span>(<span
+                style="color:#cc7832;font-weight:bold;">var </span>field <span style="color:#cc7832;font-weight:bold;">in </span>result) {<br/>
+                            s += field + <span style="color:#6a8759;">"=" </span>+ result[field] + <span
+                style="color:#6a8759;">"&lt;br/&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">               </span> }<br/>
+                        <span style="color:#9876aa;">document</span>.<span
+                style="color:#ffc66d;">querySelector</span>(<span style="color:#6a8759;">"#status"</span>).<span
+                style="color:#9876aa;">innerHTML </span>= s<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> } <span
+                style="color:#cc7832;font-weight:bold;">else </span>{<br/>
+                        <span style="color:#9876aa;">document</span>.<span
+                style="color:#ffc66d;">querySelector</span>(<span style="color:#6a8759;">"#status"</span>).<span
+                style="color:#9876aa;">innerHTML </span>= <span
+                style="color:#6a8759;">"&lt;h2&gt;No match!&lt;/h2&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> }<br/>
+                }<br/>
+            }<br/>
+            <span style="color:#808080;">//获取所有记录<br/></span><span style="color:#808080;">   </span> <span
+                style="color:#cc7832;font-weight:bold;">function </span><span style="color:#ffc66d;">getPeople</span>(e) {<br/>
+                <span style="color:#cc7832;font-weight:bold;">var </span>s = <span style="color:#6a8759;">""</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> db.<span
+                style="color:#ffc66d;">transaction</span>([<span style="color:#6a8759;">"people"</span>]<span
+                style="color:#cc7832;">, </span><span style="color:#6a8759;">"readonly"</span>).objectStore(<span
+                style="color:#6a8759;">"people"</span>).openCursor().<span
+                style="color:#ffc66d;">onsuccess </span>= <span style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                    <span style="color:#cc7832;font-weight:bold;">var </span>cursor = e.<span style="color:#ffc66d;">target</span>.<span
+                style="color:#9876aa;">result</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span style="color:#cc7832;font-weight:bold;">if </span>(cursor) {<br/>
+                        s += <span style="color:#6a8759;">"&lt;p&gt;&lt;h2&gt;Key " </span>+ cursor.<span
+                style="color:#ffc66d;">key </span>+ <span style="color:#6a8759;">"&lt;/h2&gt;&lt;/p&gt;"</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">               </span> <span
+                style="color:#cc7832;font-weight:bold;">for </span>(<span
+                style="color:#cc7832;font-weight:bold;">var </span>field <span style="color:#cc7832;font-weight:bold;">in </span>cursor.<span
+                style="color:#9876aa;">value</span>) {<br/>
+                            s += field + <span style="color:#6a8759;">"=" </span>+ cursor.<span style="color:#9876aa;">value</span>[field] + <span
+                style="color:#6a8759;">"&lt;br/&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">               </span> }<br/>
+                        s += <span style="color:#6a8759;">"&lt;/p&gt;"</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">               </span>
+        cursor.continue()<span style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span>
+        }<br/>
+                    <span style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">querySelector</span>(<span
+                style="color:#6a8759;">"#status2"</span>).<span style="color:#9876aa;">innerHTML </span>= s<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> }<br/>
+            }<br/>
+            <span style="color:#808080;">//通过索引查询记录<br/></span><span style="color:#808080;">   </span> <span
+                style="color:#cc7832;font-weight:bold;">function </span><span style="color:#ffc66d;">getPeopleByNameIndex</span>(e) {<br/>
+                <span style="color:#cc7832;font-weight:bold;">var </span>name = <span
+                style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">querySelector</span>(<span
+                style="color:#6a8759;">"#name1"</span>).<span style="color:#9876aa;">value</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#cc7832;font-weight:bold;">var </span>transaction = db.<span style="color:#ffc66d;">transaction</span>([<span
+                style="color:#6a8759;">"people"</span>]<span style="color:#cc7832;">, </span><span
+                style="color:#6a8759;">"readonly"</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#cc7832;font-weight:bold;">var </span>store = transaction.objectStore(<span
+                style="color:#6a8759;">"people"</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#cc7832;font-weight:bold;">var </span>index = store.<span
+                style="color:#ffc66d;">index</span>(<span style="color:#6a8759;">"name"</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#808080;">//name is some value<br/></span><span style="color:#808080;">       </span> <span
+                style="color:#cc7832;font-weight:bold;">var </span>request = index.<span
+                style="color:#ffc66d;">get</span>(name)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> request.<span style="color:#ffc66d;">onsuccess </span>= <span
+                style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                    <span style="color:#cc7832;font-weight:bold;">var </span>result = e.<span style="color:#ffc66d;">target</span>.<span
+                style="color:#9876aa;">result</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span style="color:#cc7832;font-weight:bold;">if </span>(result) {<br/>
+                        <span style="color:#cc7832;font-weight:bold;">var </span>s = <span style="color:#6a8759;">"&lt;p&gt;&lt;h2&gt;Name " </span>+ name + <span
+                style="color:#6a8759;">"&lt;/h2&gt;&lt;p&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">               </span> <span style="color:#cc7832;font-weight:bold;">for </span>(<span
+                style="color:#cc7832;font-weight:bold;">var </span>field <span style="color:#cc7832;font-weight:bold;">in </span>result) {<br/>
+                            s += field + <span style="color:#6a8759;">"=" </span>+ result[field] + <span
+                style="color:#6a8759;">"&lt;br/&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">               </span> }<br/>
+                        s += <span style="color:#6a8759;">"&lt;/p&gt;"</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> } <span
+                style="color:#cc7832;font-weight:bold;">else </span>{<br/>
+                        <span style="color:#9876aa;">document</span>.<span
+                style="color:#ffc66d;">querySelector</span>(<span style="color:#6a8759;">"#status3"</span>).<span
+                style="color:#9876aa;">innerHTML </span>= <span
+                style="color:#6a8759;">"&lt;h2&gt;No match!&lt;/h2&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> }<br/>
+                }<br/>
+            }<br/>
+            <span style="color:#808080;">//通过索引查询记录<br/></span><span style="color:#808080;">   </span> <span
+                style="color:#cc7832;font-weight:bold;">function </span><span style="color:#ffc66d;">getPeopleByNameIndex1</span>(e) {<br/>
+                <span style="color:#cc7832;font-weight:bold;">var </span>s = <span style="color:#6a8759;">""</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#cc7832;font-weight:bold;">var </span>name = <span
+                style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">querySelector</span>(<span
+                style="color:#6a8759;">"#name1"</span>).<span style="color:#9876aa;">value</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#cc7832;font-weight:bold;">var </span>transaction = db.<span style="color:#ffc66d;">transaction</span>([<span
+                style="color:#6a8759;">"people"</span>]<span style="color:#cc7832;">, </span><span
+                style="color:#6a8759;">"readonly"</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#cc7832;font-weight:bold;">var </span>store = transaction.objectStore(<span
+                style="color:#6a8759;">"people"</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#cc7832;font-weight:bold;">var </span>index = store.<span
+                style="color:#ffc66d;">index</span>(<span style="color:#6a8759;">"name"</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#808080;">//name is some value<br/></span><span style="color:#808080;">       </span>
+        index.openCursor().<span style="color:#ffc66d;">onsuccess </span>= <span
+                style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                    <span style="color:#cc7832;font-weight:bold;">var </span>cursor = e.<span style="color:#ffc66d;">target</span>.<span
+                style="color:#9876aa;">result</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span style="color:#cc7832;font-weight:bold;">if </span>(cursor) {<br/>
+                        s += <span style="color:#6a8759;">"&lt;p&gt;&lt;h2&gt;Key " </span>+ cursor.<span
+                style="color:#ffc66d;">key </span>+ <span style="color:#6a8759;">"&lt;/h2&gt;&lt;/p&gt;"</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">               </span> <span
+                style="color:#cc7832;font-weight:bold;">for </span>(<span
+                style="color:#cc7832;font-weight:bold;">var </span>field <span style="color:#cc7832;font-weight:bold;">in </span>cursor.<span
+                style="color:#9876aa;">value</span>) {<br/>
+                            s += field + <span style="color:#6a8759;">"=" </span>+ cursor.<span style="color:#9876aa;">value</span>[field] + <span
+                style="color:#6a8759;">"&lt;br/&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">               </span> }<br/>
+                        s += <span style="color:#6a8759;">"&lt;/p&gt;"</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">               </span>
+        cursor.continue()<span style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span>
+        }<br/>
+                    <span style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">querySelector</span>(<span
+                style="color:#6a8759;">"#status3"</span>).<span style="color:#9876aa;">innerHTML </span>= s<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> }<br/>
+            }<br/>
+        <span style="color:#e8bf6a;">&lt;/script&gt;<br/></span><span style="color:#e8bf6a;">&lt;p&gt;</span>添加数据<span
+                style="color:#e8bf6a;">&lt;br/&gt;<br/></span><span style="color:#e8bf6a;">    &lt;input </span><span
+                style="color:#bababa;">type=</span><span style="color:#a5c261;">"text" </span><span
+                style="color:#bababa;">id=</span><span style="color:#a5c261;">"name" </span><span
+                style="color:#bababa;">placeholder=</span><span style="color:#a5c261;">"Name"</span><span
+                style="color:#e8bf6a;">&gt;&lt;br/&gt;<br/></span><span
+                style="color:#e8bf6a;">    &lt;input </span><span style="color:#bababa;">type=</span><span
+                style="color:#a5c261;">"email" </span><span style="color:#bababa;">id=</span><span
+                style="color:#a5c261;">"email" </span><span style="color:#bababa;">placeholder=</span><span
+                style="color:#a5c261;">"Email"</span><span style="color:#e8bf6a;">&gt;&lt;br/&gt;<br/></span><span
+                style="color:#e8bf6a;">    &lt;button </span><span style="color:#bababa;">id=</span><span
+                style="color:#a5c261;">"addButton"</span><span style="color:#e8bf6a;">&gt;</span>Add Data<span
+                style="color:#e8bf6a;">&lt;/button&gt;<br/></span><span
+                style="color:#e8bf6a;">&lt;/p&gt;<br/></span><span style="color:#e8bf6a;">&lt;p&gt;</span>根据Key查询数据<span
+                style="color:#e8bf6a;">&lt;br/&gt;<br/></span><span style="color:#e8bf6a;">    &lt;input </span><span
+                style="color:#bababa;">type=</span><span style="color:#a5c261;">"text" </span><span
+                style="color:#bababa;">id=</span><span style="color:#a5c261;">"key" </span><span style="color:#bababa;">placeholder=</span><span
+                style="color:#a5c261;">"Key"</span><span style="color:#e8bf6a;">&gt;&lt;br/&gt;<br/></span><span
+                style="color:#e8bf6a;">    &lt;button </span><span style="color:#bababa;">id=</span><span
+                style="color:#a5c261;">"getButton"</span><span style="color:#e8bf6a;">&gt;</span>Get Data<span
+                style="color:#e8bf6a;">&lt;/button&gt;<br/></span><span
+                style="color:#e8bf6a;">&lt;/p&gt;<br/></span><span style="color:#e8bf6a;">&lt;div </span><span
+                style="color:#bababa;">id=</span><span style="color:#a5c261;">"status" </span><span
+                style="color:#bababa;">name=</span><span style="color:#a5c261;">"status"</span><span
+                style="color:#e8bf6a;">&gt;&lt;/div&gt;<br/></span><span
+                style="color:#e8bf6a;">&lt;p&gt;</span>获取所有数据<span style="color:#e8bf6a;">&lt;br/&gt;<br/></span><span
+                style="color:#e8bf6a;">    &lt;button </span><span style="color:#bababa;">id=</span><span
+                style="color:#a5c261;">"getAllButton"</span><span style="color:#e8bf6a;">&gt;</span>Get EveryOne<span
+                style="color:#e8bf6a;">&lt;/button&gt;<br/></span><span
+                style="color:#e8bf6a;">&lt;/p&gt;<br/></span><span style="color:#e8bf6a;">&lt;div </span><span
+                style="color:#bababa;">id=</span><span style="color:#a5c261;">"status2" </span><span
+                style="color:#bababa;">name=</span><span style="color:#a5c261;">"status2"</span><span
+                style="color:#e8bf6a;">&gt;&lt;/div&gt;<br/></span><span style="color:#e8bf6a;">&lt;p&gt;</span>根据索引:Name查询数据<span
+                style="color:#e8bf6a;">&lt;br/&gt;<br/></span><span style="color:#e8bf6a;">    &lt;input </span><span
+                style="color:#bababa;">type=</span><span style="color:#a5c261;">"text" </span><span
+                style="color:#bababa;">id=</span><span style="color:#a5c261;">"name1" </span><span
+                style="color:#bababa;">placeholder=</span><span style="color:#a5c261;">"Name"</span><span
+                style="color:#e8bf6a;">&gt;&lt;br/&gt;<br/></span><span
+                style="color:#e8bf6a;">    &lt;button </span><span style="color:#bababa;">id=</span><span
+                style="color:#a5c261;">"getByName"</span><span style="color:#e8bf6a;">&gt;</span>Get ByName<span
+                style="color:#e8bf6a;">&lt;/button&gt;<br/></span><span
+                style="color:#e8bf6a;">&lt;/p&gt;<br/></span><span style="color:#e8bf6a;">&lt;div </span><span
+                style="color:#bababa;">id=</span><span style="color:#a5c261;">"status3" </span><span
+                style="color:#bababa;">name=</span><span style="color:#a5c261;">"status3"</span><span
+                style="color:#e8bf6a;">&gt;&lt;/div&gt;</span><br/></div>
+</div>
+<div><br/></div>
+<div>将上面的代码复制到indexed_db.html中，用Google Chrome浏览器打开，就可以添加、查询数据。在Chrome的开发者工具中，能查看创建的DB 、存储对象（可理解成表）以及表中添加的数据。</div>
+<div><br/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/EauZGwV.png"
+        height="393" width="922"/></div>
+<div><br/></div>
+<div>IndexedDB有个非常强大的功能，就是index（索引）。它可对Value对象中任何属性生成索引，然后可以基于索引进行Value对象的快速查询。</div>
+<div><br/></div>
+<div>要生成索引或支持索引查询数据，需求在首次生成存储对象时，调用接口生成属性的索引。可以同时对对象的多个不同属性创建索引。如下面代码就对name和email两个属性都生成了索引。</div>
+<div><br/></div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#cc7832;font-weight:bold;">var </span>objectStore = thisDB.createObjectStore(<span
+            style="color:#6a8759;">"people"</span><span style="color:#cc7832;">, </span>{<span style="color:#9876aa;">autoIncrement</span>: <span
+            style="color:#cc7832;font-weight:bold;">true</span>})<span style="color:#cc7832;">;<br/></span><span
+            style="color:#808080;">//first arg is name of index, second is the path (col);<br/></span>objectStore.createIndex(<span
+            style="color:#6a8759;">"name"</span><span style="color:#cc7832;">, </span><span style="color:#6a8759;">"name"</span><span
+            style="color:#cc7832;">, </span>{<span style="color:#9876aa;">unique</span>: <span
+            style="color:#cc7832;font-weight:bold;">false</span>})<span style="color:#cc7832;">;<br/></span>objectStore.createIndex(<span
+            style="color:#6a8759;">"email"</span><span style="color:#cc7832;">, </span><span style="color:#6a8759;">"email"</span><span
+            style="color:#cc7832;">, </span>{<span style="color:#9876aa;">unique</span>: <span
+            style="color:#cc7832;font-weight:bold;">true</span>})<span style="color:#cc7832;">;</span><br/></div>
+</div>
+<div><br/></div>
+<div>生成索引后，就可以基于索引进行数据的查询。</div>
+<div><br/></div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#cc7832;font-weight:bold;">function </span><span
+            style="color:#ffc66d;">getPeopleByNameIndex</span>(e) {<br/>
+            <span style="color:#cc7832;font-weight:bold;">var </span>name = <span style="color:#9876aa;">document</span>.<span
+                style="color:#ffc66d;">querySelector</span>(<span style="color:#6a8759;">"#name1"</span>).<span
+                style="color:#9876aa;">value</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">   </span> <span style="color:#cc7832;font-weight:bold;">var </span>transaction = db.<span
+                style="color:#ffc66d;">transaction</span>([<span style="color:#6a8759;">"people"</span>]<span
+                style="color:#cc7832;">, </span><span style="color:#6a8759;">"readonly"</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> <span
+                style="color:#cc7832;font-weight:bold;">var </span>store = transaction.objectStore(<span
+                style="color:#6a8759;">"people"</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">   </span> <span style="color:#cc7832;font-weight:bold;">var </span>index = store.<span
+                style="color:#ffc66d;">index</span>(<span style="color:#6a8759;">"name"</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> <span
+                style="color:#808080;">//name is some value<br/></span><span style="color:#808080;">   </span> <span
+                style="color:#cc7832;font-weight:bold;">var </span>request = index.<span
+                style="color:#ffc66d;">get</span>(name)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">   </span> request.<span style="color:#ffc66d;">onsuccess </span>= <span
+                style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                <span style="color:#cc7832;font-weight:bold;">var </span>result = e.<span
+                style="color:#ffc66d;">target</span>.<span style="color:#9876aa;">result</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#cc7832;font-weight:bold;">if </span>(result) {<br/>
+                    <span style="color:#cc7832;font-weight:bold;">var </span>s = <span style="color:#6a8759;">"&lt;p&gt;&lt;h2&gt;Name " </span>+ name + <span
+                style="color:#6a8759;">"&lt;/h2&gt;&lt;p&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span
+                style="color:#cc7832;font-weight:bold;">for </span>(<span
+                style="color:#cc7832;font-weight:bold;">var </span>field <span style="color:#cc7832;font-weight:bold;">in </span>result) {<br/>
+                        s += field + <span style="color:#6a8759;">"=" </span>+ result[field] + <span
+                style="color:#6a8759;">"&lt;br/&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> }<br/>
+                    s += <span style="color:#6a8759;">"&lt;/p&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> } <span style="color:#cc7832;font-weight:bold;">else </span>{<br/>
+                    <span style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">querySelector</span>(<span
+                style="color:#6a8759;">"#status3"</span>).<span style="color:#9876aa;">innerHTML </span>= <span
+                style="color:#6a8759;">"&lt;h2&gt;No match!&lt;/h2&gt;"</span><span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> }<br/>
+            }<br/>
+        <span style="background-color:#344134;">}</span><br/></div>
+</div>
+<div><br/></div>
+<div>分析：IndexedDB是一种灵活且功能强大的数据存储机制，它集合了Dom Storage和Web SQL Database的优点，用于存储大块或复杂结构的数据，提供更大的存储空间，使用起来也比较简单。可以作为Web SQL
+    Database的替代。不太适合静态文件的缓存。
+</div>
+<ol>
+    <li>以key-value 的方式存取对象，可以是任何类型值或对象，包括二进制。</li>
+    <li>可以对对象任何属性生成索引，方便查询。</li>
+    <li>较大的存储空间，默认推荐250MB（分Host），比Dom Storage的5MB要大得多。</li>
+    <li>通过数据库的事务（tranction）机制进行数据操作，保证数据一致性。</li>
+    <li>异步的 API 调用，避免造成等待而影响体验。</li>
+</ol>
+<div><br/></div>
+<div>
+    <hr/>
+</div>
+<div><br/></div>
+<div><span style="font-size: 18px;"><b>2.6 File System API（只有Chrome 43+、Opera 32+以及Chrome for Android
+    46+这三个浏览器支持）</b></span></div>
+<div><br/></div>
+<div>File System API是HTML5新加入的存储机制。它为Web App提供了一个虚拟的文件系统，就像Native App访问本地文件系统一样。由于安全性的考虑，这个虚拟文件系统有一定的限制。Web
+    App在虚拟的文件系统中，可以进行文件（夹）的创建、读、写、删除、遍历等操作。
+</div>
+<div><br/></div>
+<div>File System API也是一种可选的缓存机制，和前面的SQL Database、IndexedDB 和App Cache等一样。File System API有自己的一些特定的优势：</div>
+<ol>
+    <li>可以满足大块的二进制数据（large binary blobs）存储需求。</li>
+    <li>可以通过预加载资源文件来提高性能。</li>
+    <li>可以直接编辑文件。</li>
+</ol>
+<div><br/></div>
+<div>浏览器给虚拟文件系统提供了两种类型的存储空间：临时的和持久性的。临时的存储空间是由浏览器自动分配的，但可能被浏览器回收；持久性的存储空间需要显示的申请，申请时浏览器会给用户一提示，需要用户进行确认。持久性的存储空间是Web
+    App自己管理，浏览器不会回收，也不会清除内容。持久性的存储空间大小是通过配额来管理的，首次申请时会一个初始的配额，配额用完需要再次申请。
+</div>
+<div><br/></div>
+<div>虚拟的文件系统是运行在沙盒中。不同Web App的虚拟文件系统是互相隔离的，虚拟文件系统与本地文件系统也是互相隔离的。</div>
+<div><br/></div>
+<div>File System API提供了一组文件与文件夹的操作接口，有同步和异步两个版本，可满足不同的使用场景。下面通过一个文件创建、读、写的例子，演示下简单的功能与用法。</div>
+<div><br/></div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#e8bf6a;">&lt;script </span><span style="color:#bababa;">type=</span><span
+            style="color:#a5c261;">"text/javascript"</span><span style="color:#e8bf6a;">&gt;<br/></span><span
+            style="color:#e8bf6a;">   </span> <span style="color:#9876aa;">window</span>.<span style="color:#9876aa;">requestFileSystem </span>= <span
+            style="color:#9876aa;">window</span>.<span style="color:#9876aa;">requestFileSystem </span>|| <span
+            style="color:#9876aa;">window</span>.webkitRequestFileSystem<span style="color:#cc7832;">;<br/></span><span
+            style="color:#cc7832;">   </span> <span style="color:#808080;">//请求临时文件的存储空间<br/></span><span
+            style="color:#808080;">   </span> <span style="color:#cc7832;font-weight:bold;">if </span>(<span
+            style="color:#9876aa;">window</span>.<span style="color:#9876aa;">requestFileSystem</span>) {<br/>
+                <span style="color:#9876aa;">window</span>.<span style="color:#9876aa;">requestFileSystem</span>(<span
+                style="color:#9876aa;">window</span>.TEMPORARY<span style="color:#cc7832;">, </span><span
+                style="color:#6897bb;">5 </span>* <span style="color:#6897bb;">1024 </span>* <span
+                style="color:#6897bb;">1024</span><span style="color:#cc7832;">, </span><span style="color:#ffc66d;">initFS</span><span
+                style="color:#cc7832;">, </span><span style="color:#ffc66d;">errorHandler</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> } <span
+                style="color:#cc7832;font-weight:bold;">else </span>{<br/>
+                <span style="color:#ffc66d;">alert</span>(<span style="color:#6a8759;">'Sorry! Your browser doesn</span><span
+                style="color:#cc7832;">\'</span><span style="color:#6a8759;">t support the FileSystem API'</span>)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> }<br/>
+            <span style="color:#808080;">//请求成功回调<br/></span><span style="color:#808080;">   </span> <span
+                style="color:#cc7832;font-weight:bold;">function </span><span style="color:#ffc66d;">initFS</span>(fs) {<br/>
+                <span style="color:#808080;">//在根目录下打开log.txt文件，如果不存在就创建<br/></span><span style="color:#808080;">        //fs就是成功返回的文件系统对象，fs.root代表根目录<br/></span><span
+                style="color:#808080;">       </span> fs.<span style="color:#ffc66d;">root</span>.getFile(<span
+                style="color:#6a8759;">'log.txt'</span><span style="color:#cc7832;">, </span>{<span
+                style="color:#9876aa;">create</span>: <span style="color:#cc7832;font-weight:bold;">true</span>}<span
+                style="color:#cc7832;">, </span><span style="color:#cc7832;font-weight:bold;">function </span>(fileEntry) {<br/>
+                    <span style="color:#808080;">//fileEntry是返回的一个文件对象，代表打开的文件<br/></span><span style="color:#808080;">            //向文件写入指定内容<br/></span><span
+                style="color:#808080;">           </span> <span style="color:#ffc66d;">writeFile</span>(fileEntry)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> <span
+                style="color:#808080;">//将写入的内容又读出来，显示在页面上<br/></span><span style="color:#808080;">           </span>
+        <span style="color:#ffc66d;">readFile</span>(fileEntry)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> }<span style="color:#cc7832;">, </span><span
+                style="color:#ffc66d;">errorHandler</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">   </span> }<br/>
+            <span style="color:#808080;">//读取文件内容<br/></span><span style="color:#808080;">   </span> <span
+                style="color:#cc7832;font-weight:bold;">function </span><span style="color:#ffc66d;">readFile</span>(fileEntry) {<br/>
+                <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">'readFile'</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#808080;">// Get a File object representing the file,<br/></span><span
+                style="color:#808080;">        // then use FileReader to read its contents.<br/></span><span
+                style="color:#808080;">       </span> fileEntry.<span style="color:#9876aa;">file</span>(<span
+                style="color:#cc7832;font-weight:bold;">function </span>(file) {<br/>
+                    <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">'createReader'</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> <span style="color:#cc7832;font-weight:bold;">var </span>reader = <span
+                style="color:#cc7832;font-weight:bold;">new </span><span style="color:#9876aa;">FileReader</span>()<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span>
+        reader.onloadend = <span style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                        <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">'onloadend'</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">               </span> <span style="color:#cc7832;font-weight:bold;">var </span>txtArea = <span
+                style="color:#9876aa;">document</span>.<span style="color:#ffc66d;">createElement</span>(<span
+                style="color:#6a8759;">'textarea'</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">               </span> txtArea.<span style="color:#9876aa;">value </span>= <span
+                style="color:#cc7832;font-weight:bold;">this</span>.<span style="color:#9876aa;">result</span><span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">               </span> <span
+                style="color:#9876aa;">document</span>.<span style="color:#9876aa;">body</span>.<span
+                style="color:#ffc66d;">appendChild</span>(txtArea)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> }<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> reader.<span
+                style="color:#ffc66d;">readAsText</span>(file)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> }<span style="color:#cc7832;">, </span><span
+                style="color:#ffc66d;">errorHandler</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">   </span> }<br/>
+            <span style="color:#808080;">//向文件写入指定内容<br/></span><span style="color:#808080;">   </span> <span
+                style="color:#cc7832;font-weight:bold;">function </span><span style="color:#ffc66d;">writeFile</span>(fileEntry) {<br/>
+                <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">'writeFile'</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> <span style="color:#808080;">// Create a FileWriter object for our FileEntry (log.txt).<br/></span><span
+                style="color:#808080;">       </span> fileEntry.createWriter(<span
+                style="color:#cc7832;font-weight:bold;">function </span>(fileWriter) {<br/>
+                    <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">'createWriter'</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> fileWriter.<span
+                style="color:#ffc66d;">onwriteend </span>= <span
+                style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                        <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">'Write completed'</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> }<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">           </span> fileWriter.<span style="color:#ffc66d;">onerror </span>= <span
+                style="color:#cc7832;font-weight:bold;">function </span>(e) {<br/>
+                        <span style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(<span
+                style="color:#6a8759;">'Write failed: ' </span>+ e.<span style="color:#ffc66d;">toString</span>())<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> }<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> <span
+                style="color:#808080;">// Create a new Blob and write it to log.txt.<br/></span><span
+                style="color:#808080;">           </span> <span style="color:#cc7832;font-weight:bold;">var </span>blob = <span
+                style="color:#cc7832;font-weight:bold;">new </span><span style="color:#9876aa;">Blob</span>([<span
+                style="color:#6a8759;">'Hello, World!'</span>]<span style="color:#cc7832;">, </span>{<span
+                style="color:#9876aa;">type</span>: <span style="color:#6a8759;">'text/plain'</span>})<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">           </span> fileWriter.<span
+                style="color:#ffc66d;">write</span>(blob)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">       </span> }<span style="color:#cc7832;">, </span><span
+                style="color:#ffc66d;">errorHandler</span>)<span style="color:#cc7832;">;<br/></span><span
+                style="color:#cc7832;">   </span> }<br/>
+            <span style="color:#cc7832;font-weight:bold;">function </span><span
+                style="color:#ffc66d;">errorHandler</span>(err) {<br/>
+                <span style="color:#cc7832;font-weight:bold;">var </span>msg = <span style="color:#6a8759;">'An error occured: ' </span>+ err<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#9876aa;">console</span>.<span style="color:#ffc66d;">log</span>(msg)<span
+                style="color:#cc7832;">;<br/></span><span style="color:#cc7832;">   </span> }<br/>
+        <span style="color:#e8bf6a;">&lt;/script&gt;</span><br/></div>
+</div>
+<div><br/></div>
+<div>将上面代码复制到 file<i>system</i>api.html 文件中，用Google Chrome浏览器打开（现在File System API<span
+        style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">只有Chrome 43+、Opera 32+以及Chrome for Android 46+这三个浏览器支持</span>）。由于Google
+    Chrome禁用了本地 HTML文件中的File System API功能，在启动Chrome时，要加上“—allow-file-access-from-files”命令行参数。
+</div>
+<div><br/></div>
+<div><img
+        src="HTML5%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E6%B5%85%E6%9E%90%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E5%8A%A0%E8%BD%BD%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89.resources/1MmrSvq.gif"
+        height="194" width="640"/></div>
+<div>上面截图，左边是HTML运行的结果，右边是Chrome开发者工具中看到的Web的文件系统。基本上HTML5的几种缓存机制的数据都能在这个开发者工具看到，非常方便。</div>
+<div><br/></div>
+<div>分析：File System API给Web App带来了文件系统的功能，Native文件系统的功能在Web App中都有相应的实现。任何需要通过文件来管理数据，或通过文件系统进行数据管理的场景都比较适合。</div>
+<div><br/></div>
+<div>到目前，Android系统的Webview还不支持File System API。</div>
+<div><br/></div>
+<div>
+    <hr/>
+</div>
+<div>转载自 <a href="http://www.csdn.net/article/2015-12-16/2826489" target="_blank">http://www.csdn.net/article/2015-12-16/2826489</a><br/></div>
+<div><br/></div>
+<div><br/></div>
+<div><br/></div>
+</body>
+</html>

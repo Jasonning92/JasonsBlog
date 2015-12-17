@@ -1,0 +1,21 @@
+/* line 1, ../sass/iframe.sass */
+body {
+  padding: 50px 20px;
+}
+/* line 3, ../sass/iframe.sass */
+body > div {
+  padding: 5px 0;
+  line-height: 25px;
+}
+/* line 7, ../sass/iframe.sass */
+body > div.code > div {
+  padding: 15px;
+}
+/* line 9, ../sass/iframe.sass */
+body li {
+  min-height: 25px;
+}
+/* line 11, ../sass/iframe.sass */
+body b {
+  font-weight: 600;
+}

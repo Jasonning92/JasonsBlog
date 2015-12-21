@@ -36,7 +36,7 @@ $(function () {
  * @private
  */
 var _hmt = _hmt || [];
-(function() {
+(function () {
     var hm = document.createElement("script");
     hm.src = "//hm.baidu.com/hm.js?a5817c82f0423f759aa1fec75f7a1cec";
     var s = document.getElementsByTagName("script")[0];
@@ -45,20 +45,18 @@ var _hmt = _hmt || [];
 
 
 $(function () {
-    $(".page").css("display","none");
-    var scrollHeight = 10;
+    $(".page").css("display", "none");
+    var scrollHeight = 260;
     $(window).scroll(function () {
-        var tip_div = $(".blog-gotop");
-
         if ($(window).scrollTop() > scrollHeight) {
-            $(".page").fadeIn(500);
-            $(".index").fadeOut(500);
-            $("#main_div").css("padding-top","150px");
+            $(".page").css("display", "block");
+            $(".index").css("display", "none");
+            $("#main_div").css("padding-top", "300px");
         }
         else {
-            $(".index").fadeIn(500);
-            $(".page").fadeOut(500);
-            $("#main_div").css("padding-top","0px");
+            $(".index").css("display", "block");
+            $(".page").css("display", "none");
+            $("#main_div").css("padding-top", "0px");
         }
 
     });

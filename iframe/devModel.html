@@ -10,46 +10,46 @@
     <meta name="latitude" content="39.99707085797257"/>
     <meta name="longitude" content="116.3292327707198"/>
     <meta name="source" content="desktop.mac"/>
-    <meta name="updated" content="2015-12-16 06:24:32 +0000"/>
+    <meta name="updated" content="2015-12-21 06:41:35 +0000"/>
+    <title>关于前端开发模式</title></head>
     <link rel="stylesheet" href="../css/iframe.css">
-    <title>关于前端开发模式</title>
-</head>
-<body style="padding: 50px 20px">
-<div style="padding: 15px 0"><span style="font-size: 24px;">一. 前言</span></div>
+<body>
+<div><span style="font-size: 24px;">一. 前言</span></div>
 <div>          最开始刚接触前端时，感觉所有的操作都是在 control+c
-    和 control+v，对于编写html页面来讲，每个页面大部分的结构都是相似的；对于写css样式，很多时候都是大段大段的粘贴，比如按钮的hover效果，也许只是背景颜色不同，box-shadow都是一样的，而box-shadow却需要带上各种浏览器前缀。后来慢慢的，css样式使用sass编写，带来了强大的
-    @mixin 和 @include，而且缩进语法也让页面清爽了不少，不用再看一大长串的样式了；compass 自带的自动添加浏览器前缀告别了手动粘贴；自动生成的雪碧图，告别了PS自己拼图的境地。对于 html页面的编写，现在使用了
-    jade，同样提供了引入和大量减少手敲字符的劳动量。
+    和 control+v，对于编写html页面来讲，每个页面大部分的结构都是相似的；对于写css样式，很多时候都是大段大段的粘贴，比如按钮的hover效果，也许只是背景颜色不同，box-shadow都是一样的，而box-shadow却需要带上各种浏览器前缀。Sass
+    的出现，带来了强大的 @mixin 和 @include，而且缩进语法也让页面清爽了不少，不用再看一大长串的样式了；compass 自带的自动添加浏览器前缀告别了手动粘贴；自动生成的雪碧图，告别了PS自己拼图的境地。对于
+    html页面的编写，现在使用 jade，同样提供了引入和大量减少手敲字符的劳动量。
 </div>
 <div><br/></div>
 <div>
     <hr/>
 </div>
 <div><br/></div>
-<div style="padding: 15px 0"><span style="font-size: 24px;">二. 前端基本结构</span></div>
+<div><span style="font-size: 24px;">二. 前端基本结构</span></div>
 <div>          现在的趋势是前段工程模块化，简而言之就是前端页面是一个由『积木』（组件）搭建起来的『楼房』（完整html页面）。</div>
-<div>          这样做的好处主要有两点：1. 组件可以再不同项目中复用，最大的改动可能只是『换肤』（修改css文件）。2.
-    如果你的项目使用了WebApi，那么这样的组件式开发将完美契合你的开发，也就是说一个组件是一个VM（或者是C）。
-</div>
+<div>          这样做的好处主要有两点：</div>
+<div>               1. 组件可以在不同项目中复用，最大的改动可能只是『换肤』（修改css文件）。</div>
+<div>               2. 如果你的项目使用了WebApi，那么这样的组件式开发将完美契合你的开发，也就是说一个组件是一个VM（或者是C）。</div>
 <div>          那么，我们的一个组件需要包含什么呢？需要包括：结构（html）、行为（js）、样式（css）、数据绑定（ag、react等）。</div>
-<div style="padding: 15px 0">          <img
+<div>          <img
         src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/94D7DD68-1049-475D-A2E1-27F2EE3B074E.png"
         height="264" width="318"/></div>
 <div>          其中，html（jade）主要控制组件结构；js文件控制组件动画等；css（sass）让组件变『漂亮』，并且有的组件需要做到响应式的显示；vm则将数据绑定到组件上。</div>
 <div>          这样，我们的整个项目就是这样的：       </div>
-<table style="border-collapse: collapse; margin: 15px;width:52.97520661157024%;table-layout:fixed;">
+<table style="border-collapse: collapse; margin-left: 0px;table-layout:fixed;width:52.97520661157024%;">
     <tr>
-        <td style="border: 1px solid rgb(219, 219, 219); padding: 15px; margin: 0px;width:30.733229329173167%;">
+        <td style="border: 1px solid rgb(219, 219, 219); padding: 10px; margin: 0px;width:30.733229329173167%;">
             <div>层级结构</div>
         </td>
-        <td style="border: 1px solid rgb(219, 219, 219); padding: 15px; margin: 0px;width:69.11076443057722%;">
+        <td style="border: 1px solid rgb(219, 219, 219); padding: 10px; margin: 0px;width:69.11076443057722%;">
             <div>解释</div>
         </td>
     </tr>
     <tr>
         <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
-            <div><img style="max-width: 100%;max-height: 100%"
-                    src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/72E6EE61-265B-460F-8983-CB5DA079C778.png"/></div>
+            <div><img
+                    src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/72E6EE61-265B-460F-8983-CB5DA079C778.png"
+                    height="290" width="982"/></div>
         </td>
         <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
             <div>一个项目</div>
@@ -58,8 +58,9 @@
     </tr>
     <tr>
         <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
-            <div><img style="max-width: 100%;max-height: 100%"
-                    src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/E60BC787-DE8C-41E0-BF3D-15D78CA3192B.png"/></div>
+            <div><img
+                    src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/E60BC787-DE8C-41E0-BF3D-15D78CA3192B.png"
+                    height="1082" width="858"/></div>
         </td>
         <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
             <div>一个页面</div>
@@ -72,8 +73,9 @@
     </tr>
     <tr>
         <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
-            <div><img style="max-width: 100%;max-height: 100%"
-                    src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/F66D0CE0-9006-49D4-9E95-20D638AE8C7B.png"/></div>
+            <div><img
+                    src="%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F.resources/F66D0CE0-9006-49D4-9E95-20D638AE8C7B.png"
+                    height="362" width="598"/></div>
         </td>
         <td style="border-style:solid;border-width:1px;border-color:rgb(219,219,219);padding:10px;margin:0px;width:50%;">
             <div>一个组件包含</div>
@@ -89,9 +91,9 @@
     <hr/>
 </div>
 <div><span style="font-size: 24px;"> </span></div>
-<div style="padding: 15px 0"><span style="font-size: 24px;">三.  模块化开发技术</span></div>
+<div><span style="font-size: 24px;">三.  模块化开发技术</span></div>
 <div>          这一部分主要介绍一下之前提到的jade和sass如何配合模块化开发。</div>
-<div style="padding: 15px 0"><span style="font-size: 18px;">     A. HTML编写新方式——Jade</span></div>
+<div><span style="font-size: 18px;">     A. HTML编写新方式——Jade</span></div>
 <div>          如果你因为 html 的各种『 &lt; 』和『 /&gt; 』而烦恼，那么推荐使用 jade（<a href="http://naltatis.github.com/jade-syntax-docs">http://naltatis.github.com/jade-syntax-docs</a>）
     。这里只是简要的说如何使用 Jade中的技术 来配合上面说的开发方式。
 </div>
@@ -102,20 +104,21 @@
 <div>               盒子就是指该组件只是一个容器，如模态窗、滑动的一个抽屉。大部分盒子都不会有数据绑定的任务，相反，它的行为 js 可能会比较多，即它可能会包含很多的动画。</div>
 <div>               因为盒子『可能它的内部需要包含其他组件』的特性，我们就不能只用 Jade 提供的 <u><i>include</i></u> 来简单引入组件，就需要使用 <u><i>mixin</i></u> 来实现。
 </div>
-<div style="padding: 15px 0">
+<div class="code">
     <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
             style="color:#a07458;">mixin </span>SlideBox(name)<br/>
             <span style="color:#e8bf6a;">div</span>(<span style="color:#bababa;">data-who</span>=<span
                 style="color:#6a8759;">"#{name}"</span>)<br/>
                 <span style="color:#808080;">//盒子内容<br/></span><span style="color:#808080;">       </span> <span
-                style="color:#e8bf6a;">div<br/></span><span style="color:#e8bf6a;">            block<br/></span><span
+                style="color:#e8bf6a;">div<br/></span><span style="color:#e8bf6a;">            <span
+                style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">block</span><br/></span><span
                 style="color:#e8bf6a;">       </span> <span
                 style="color:#e8bf6a;background-color:#344134;">a</span><br/></div>
 </div>
 <div>              </div>
 <div>               如上图，我们定义了一个叫 SlideBox 的『盒子』，引用他可以传入一个叫 <u><i>name</i></u> 的参数，并且它拥有一个装东西的 <u><i>block</i></u> ，它代表这个盒子可以装的东西。这样定义之后我们就可以在主页面去引用它了，如下图：
 </div>
-<div style="padding: 15px 0">
+<div class="code">
     <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
             style="color:#a07458;">include </span><span
             style="color:#8585ff;">Components/m-SlideBox_m/SlideBox<br/></span>+<span
@@ -125,7 +128,7 @@
 </div>
 <div><br/></div>
 <div>               首先我们先将 mixin 引入进来，并且使用 +Name来引入这个『盒子』，并且下一行缩进后将需要添加的『零件』放到这个『盒子』里。这样，它就会生成如下图的html片段了。</div>
-<div style="padding: 15px 0">
+<div class="code">
     <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
             style="color:#808080;font-style:italic;">&lt;!-- 收缩展开盒子Created by Jason on 15/12/14.--&gt;<br/></span><span
             style="color:#e8bf6a;">&lt;div </span><span style="color:#bababa;">data-who=</span><span
@@ -154,7 +157,7 @@
 </div>
 <div><br/></div>
 <div>               有的情景下，我们的『盒子』需要变成一个『柜子』，就是说需要多个地方去装我们的『零件』，那我们定义『盒子』时，只需要加入多个 <u><i>block</i></u> 就可以了，如下图</div>
-<div style="padding: 15px 0">
+<div class="code">
     <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
             style="color:#a07458;">mixin </span>SlideBox(name)<br/>
             <span style="color:#e8bf6a;">div</span>(<span style="color:#bababa;">data-who</span>=<span
@@ -162,10 +165,11 @@
                 <span style="color:#808080;">//盒子内容<br/></span><span style="color:#808080;">       </span> <span
                 style="color:#e8bf6a;">div<br/></span><span style="color:#e8bf6a;">            block<br/></span><span
                 style="color:#e8bf6a;">        a<br/></span><span style="color:#e8bf6a;">           </span> <span
-                style="color:#e8bf6a;background-color:#344134;">block</span><br/></div>
+                style="background-color: rgb(255, 250, 165);-evernote-highlight:true;"><span
+                style="color:#e8bf6a;background-color:#344134;">block</span></span><br/></div>
 </div>
 <div><br/></div>
-<div style="padding: 15px 0">
+<div class="code">
     <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
             style="color:#a07458;">include </span><span
             style="color:#8585ff;background-color:#344134;">Components</span><span style="color:#8585ff;">/m-SlideBox_m/SlideBox<br/></span>+<span
@@ -181,6 +185,111 @@
 <ul>
     <li><i><b>『零件』</b></i></li>
 </ul>
+<div>          对于零件，我们经过实践发现也会分为以下两种：</div>
+<div>               1. 零件中不包含任何可变样式或属性，或者虽然零件样式相同，但是对应的WebAPI是两个。这样的情况不包含可以使用 媒体查询 或 JS 控制样式的情况。</div>
+<div>               2. 固定样式的零件，比如搜索框、导航Nav等零件。</div>
+<div>         </div>
+<div>          对于可变零件的编写，依然使用 <i><u>mixin</u></i> 来实现，比如下边的一个零件</div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#a07458;">mixin </span>CwList(Type,controller)<br/>
+            <span style="color:#e8bf6a;">link</span>(<span style="color:#bababa;">rel</span>=<span
+                style="color:#6a8759;">"stylesheet" </span><span style="color:#bababa;">href</span>=<span
+                style="color:#6a8759;">"../Components/m-CwList_r/CwList.css"</span>)<br/>
+            <span style="color:#e8bf6a;">div</span>(<span
+                style="background-color: rgb(255, 250, 165);-evernote-highlight:true;"><span style="color:#bababa;">ms-controller</span>=</span><span
+                style="color:#6a8759;"><span style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">"#{controller}"</span> </span><span
+                style="color:#bababa;">class</span>=<span style="color:#6a8759;">"<span
+                style="background-color: rgb(255, 250, 165);-evernote-highlight:true;">#{Type}</span> hex-cmpnt-CwList"</span>)<br/>
+                <span style="color:#e8bf6a;">a</span>(<span style="color:#bababa;">ms-repeat</span>=<span
+                style="color:#6a8759;">"list"</span>).<span
+                style="color:#9876aa;font-style:italic;">one<br/></span><span style="color:#9876aa;font-style:italic;">           </span>
+        <span style="color:#808080;">//图<br/></span><span style="color:#808080;">           </span> <span
+                style="color:#e8bf6a;">div</span>.<span style="color:#9876aa;font-style:italic;">img<br/></span><span
+                style="color:#9876aa;font-style:italic;">               </span> <span style="color:#e8bf6a;">img</span>(<span
+                style="color:#bababa;">ms-attr-src</span>=<span style="color:#6a8759;">"el.img"</span>)<br/>
+                    <span style="color:#808080;">//文字<br/></span><span style="color:#808080;">           </span> <span
+                style="color:#e8bf6a;">div</span>.<span style="color:#9876aa;font-style:italic;">info<br/></span><span
+                style="color:#9876aa;font-style:italic;">               </span> <span style="color:#e8bf6a;">span</span>.<span
+                style="color:#9876aa;font-style:italic;">title </span><span
+                style="color:#6a8759;">{{el.name}}<br/></span><span style="color:#6a8759;">               </span> <span
+                style="color:#e8bf6a;">span</span>.<span style="color:#9876aa;font-style:italic;">com </span><span
+                style="color:#6a8759;">评论数{{el.contNum}}</span><br/></div>
+</div>
+<div>          这个零件中，包括了两个变量 <i>Type</i> 和 <i>controller</i> 。</div>
+<div>          这个零件的结构对应两种样式，一种是横向列表，另一种是大图列表。因此这个零件将有两种样式名；同时零件也对应两个不同的 WebAPI。</div>
+<div>          因此，需要实现这个零件就需要使用 <u><i>mixin</i></u>。</div>
 <div><br/></div>
+<div>          对于固定样式的零件，那么就简单的使用 <i><u>include</u></i> 来引入就可以了。如下图的搜索框组件：</div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#e8bf6a;">link</span>(<span style="color:#bababa;">rel</span>=<span style="color:#6a8759;">"stylesheet" </span><span
+            style="color:#bababa;">href</span>=<span
+            style="color:#6a8759;">"../Components/Search_r/Search.css"</span>)<br/>
+        <span style="color:#e8bf6a;">div</span>.<span
+                style="color:#9876aa;font-style:italic;">hex-cmpnt-Search<br/></span><span
+                style="color:#9876aa;font-style:italic;">   </span> <span style="color:#e8bf6a;">i<br/></span><span
+                style="color:#e8bf6a;">    input</span>(<span style="color:#bababa;">type</span>=<span
+                style="color:#6a8759;">"text" </span><span style="color:#bababa;">placeholder</span>=<span
+                style="color:#6a8759;">"请输入关键字"</span>)<br/></div>
+</div>
+<div><br/></div>
+<div><span style="font-size: 18px;">     B. Css编写——Sass</span></div>
+<div>          我们这样的开发模式，要达到的目的就是提高代码的复用率，那么我们在开发的时候就需要考虑到之后的项目可能会改变的部分。</div>
+<div>          对于 Css 文件，问题就是不同项目主色调可能不同，那么我们就需要将样式中所有的背景、文字和阴影颜色，图片引用以及可能变化的宽度或高度提取出来，通过引用不同的变量组文件，达到组件复用。目录结构如下图：
+</div>
+<div>          可以看到，对于一个组件Sass文件，可能对应多个变量组（即两种配色方式）。</div>
+<div>          我们先来看一下其中一个皮肤文件：</div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#bc9455;font-style:italic;">// -----------------------------   上一页&amp;下一页   -----------------------------<br/></span><span
+            style="color:#bc9455;font-style:italic;">// ============================== 变量 ==============================<br/></span><span
+            style="color:#6d9cbe;">$BeforANext_height</span>: <span style="color:#a5c261;">44</span>px<br/>
+        <span style="color:#6d9cbe;">$BeforANext_background_color</span>: <span
+                style="color:#6897bb;">#ffffff<br/></span><span style="color:#6d9cbe;">$BeforANext_border_color</span>: <span
+                style="color:#6897bb;">#d5d5d5<br/></span><span
+                style="color:#6d9cbe;">$BeforANext_back_border_color</span>: <span
+                style="color:#6897bb;">#d5d5d5<br/></span><span
+                style="color:#6d9cbe;">$BeforANext_back_image</span>: <span
+                style="color:#a5c261;">"return"<br/></span><span
+                style="color:#6d9cbe;">$BeforANext_before_border_color</span>: <span style="color:#6897bb;">#d5d5d5<br/></span><span
+                style="color:#6d9cbe;">$BeforANext_before_image</span>: <span
+                style="color:#a5c261;">"before"<br/></span><span
+                style="color:#6d9cbe;">$BeforANext_next_image</span>: <span style="color:#a5c261;">"next"</span><br/>
+    </div>
+</div>
+<div>          这个方式用到了 Sass 中的变量声明方式  <u><i>$Name</i></u> 。这样的变量包括组件的各种颜色、引用的图片名称和组件的宽高等参数，这样就构成了一个『皮肤』文件。</div>
+<div>          那么我们在主 Sass 引用中引用如下图：</div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:12.0pt;"><span
+            style="color:#bc9455;font-style:italic;">// ============================== 变量 ==============================<br/></span><span
+            style="color:#cc7832;">@import </span><span style="color:#a5c261;">"constant_1"<br/></span><span
+            style="color:#bc9455;font-style:italic;">// ============================== 样式 ==============================<br/></span>.<span
+            style="color:#ffc66d;">hex-cmpnt-BeforANext<br/></span><span style="color:#ffc66d;"> </span> <span
+            style="color:#9876aa;">height</span>: <span style="color:#6d9cbe;">$BeforANext_height<br/></span><span
+            style="color:#6d9cbe;"> </span> <span style="color:#9876aa;">width</span>: <span
+            style="color:#a5c261;">100</span>%<br/>
+          <span style="color:#9876aa;">border-bottom</span>: <span style="color:#a5c261;">1</span>px solid <span
+                style="color:#6d9cbe;">$BeforANext_border_color<br/></span><span style="color:#6d9cbe;"> </span> <span
+                style="color:#9876aa;">background-color</span>: <span style="color:#6d9cbe;">$BeforANext_background_color<br/></span><span
+                style="color:#6d9cbe;"> </span> &gt; <span style="color:#cc7832;">div<br/></span><span
+                style="color:#cc7832;">   </span> <span style="color:#9876aa;">display</span>: block<br/>
+            &amp;.<span style="color:#ffc66d;">back<br/></span><span style="color:#ffc66d;">     </span> <span
+                style="color:#9876aa;">float</span>: left<br/>
+              <span style="color:#9876aa;">margin</span>: <span style="color:#a5c261;">8</span>px <span
+                style="color:#a5c261;">0 0 20</span>px<br/>
+              &gt; <span style="color:#cc7832;">a<br/></span><span style="color:#cc7832;">       </span> <span
+                style="color:#9876aa;">display</span>: block<br/>
+                <span style="color:#9876aa;">height</span>: <span style="color:#a5c261;">27</span>px<br/>
+                <span style="color:#9876aa;">width</span>: <span style="color:#a5c261;">27</span>px<br/>
+                <span style="color:#9876aa;">border-radius</span>: <span style="color:#a5c261;">50</span>%<br/>
+                <span style="color:#9876aa;">border</span>: <span style="color:#a5c261;">1</span>px solid <span
+                style="color:#6d9cbe;">$BeforANext_back_border_color<br/></span><span
+                style="color:#6d9cbe;">       </span> <span style="color:#cc7832;">@include </span><span
+                style="color:#ffc66d;">images-sprite</span>(<span
+                style="color:#6d9cbe;">$BeforANext_back_image</span>)<br/></div>
+</div>
+<div>          我们这个主Sass文件，使用的是第一个皮肤，因为我们的名称定义已经固定，所以对于主Sass来说，我们只需要引用变量名称，为不需要考虑它的值到底是什么。</div>
+<div>          这样，我们的零件可已拥有多个皮肤，分别在不同的项目中使用。</div>
 </body>
 </html>

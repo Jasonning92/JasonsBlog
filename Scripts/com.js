@@ -1,6 +1,9 @@
 /**
  * Created by Jason on 15/12/15.
  */
+/**
+ * 返回顶部代码
+ */
 $(function () {
     var div_string = "<div class='blog-gotop' style='bottom: " + top + "px;'><a>TOP</a></div>";
     var div = $(div_string);
@@ -27,6 +30,11 @@ $(function () {
     });
 });
 
+/**
+ * 百度统计代码
+ * @type {Array}
+ * @private
+ */
 var _hmt = _hmt || [];
 (function() {
     var hm = document.createElement("script");
@@ -34,3 +42,24 @@ var _hmt = _hmt || [];
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
 })();
+
+
+$(function () {
+    $(".page").css("display","none");
+    var scrollHeight = 10;
+    $(window).scroll(function () {
+        var tip_div = $(".blog-gotop");
+
+        if ($(window).scrollTop() > scrollHeight) {
+            $(".page").fadeIn(500);
+            $(".index").fadeOut(500);
+            $("#main_div").css("padding-top","150px");
+        }
+        else {
+            $(".index").fadeIn(500);
+            $(".page").fadeOut(500);
+            $("#main_div").css("padding-top","0px");
+        }
+
+    });
+});

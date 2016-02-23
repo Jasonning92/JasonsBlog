@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="exporter-version" content="Evernote Mac 6.4 (452971)"/>
+    <meta name="altitude" content="51.4669303894043"/>
+    <meta name="author" content="jasonning92@163.com"/>
+    <meta name="created" content="2016-02-23 02:45:13 +0000"/>
+    <meta name="latitude" content="40.0077719316287"/>
+    <meta name="longitude" content="116.3325223225166"/>
+    <meta name="source" content="desktop.mac"/>
+    <meta name="updated" content="2016-02-23 05:57:16 +0000"/>
+    <title>纯CSS方块转化梯形动画</title></head>
+<link rel="stylesheet" href="../css/iframe.css">
+<link rel="stylesheet" href="./纯CSS方块转化梯形动画/test.css">
+<body>
+<div><span style="font-size: 24px;">一.     先画个三角</span></div>
+<div>     首先，我们需要知道用 css 怎么画出一个三角，下面分享一个本人写的 sass 混合器：</div>
+<div class="code">
+<pre style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:9.0pt;">
+<span style="color:#bc9455;font-style:italic;">//切三角<br/></span><span style="color:#d0d0ff;">@mixin </span><span
+        style="color:#e8bf6a;">shape_triangle</span>(<span style="color:#6d9cbe;">$direction</span><span
+        style="color:#cc7832;">,</span><span style="color:#6d9cbe;">$height</span><span
+        style="color:#cc7832;">,</span><span style="color:#6d9cbe;">$width</span><span
+        style="color:#cc7832;">,</span><span style="color:#6d9cbe;background-color:#344134;">$color</span>)<br/>  <span
+        style="color:#bababa;">width</span>: <span style="color:#6897bb;">0<br/></span><span
+        style="color:#6897bb;"/><span style="color:#bababa;">height</span>: <span
+        style="color:#6897bb;">0<br/></span><span style="color:#6897bb;"/><span style="color:#cc7832;">@if </span><span
+        style="color:#6d9cbe;">$direction </span>== <span style="color:#6a8759;">'up'<br/></span><span
+        style="color:#6a8759;"/><span style="color:#bababa;">border-left</span>: <span
+        style="color:#6d9cbe;">$width </span><span style="color:#a5c261;">solid transparent<br/></span><span
+        style="color:#a5c261;"/><span style="color:#bababa;">border-right</span>: <span
+        style="color:#6d9cbe;">$width </span><span style="color:#a5c261;">solid transparent<br/></span><span
+        style="color:#a5c261;"/><span style="color:#bababa;">border-bottom</span>: <span
+        style="color:#6d9cbe;">$height </span><span style="color:#a5c261;">solid </span><span
+        style="color:#6d9cbe;">$</span><span style="color:#6d9cbe;background-color:#344134;">color</span><span
+        style="color:#6d9cbe;"><br/></span><span style="color:#6d9cbe;"/><span
+        style="color:#cc7832;">@else if </span><span style="color:#6d9cbe;">$direction </span>== <span
+        style="color:#6a8759;">'left'<br/></span><span style="color:#6a8759;"/><span
+        style="color:#bababa;">border-top</span>: <span style="color:#6d9cbe;">$width </span><span
+        style="color:#a5c261;">solid transparent<br/></span><span style="color:#a5c261;"/><span style="color:#bababa;">border-bottom</span>: <span
+        style="color:#6d9cbe;">$width </span><span style="color:#a5c261;">solid transparent<br/></span><span
+        style="color:#a5c261;"/><span style="color:#bababa;">border-right</span>: <span
+        style="color:#6d9cbe;">$height </span><span style="color:#a5c261;">solid </span><span
+        style="color:#6d9cbe;">$</span><span style="color:#6d9cbe;background-color:#344134;">color</span><span
+        style="color:#6d9cbe;"><br/></span><span style="color:#6d9cbe;"/><span
+        style="color:#cc7832;">@else if </span><span style="color:#6d9cbe;">$direction </span>== <span
+        style="color:#6a8759;">'right'<br/></span><span style="color:#6a8759;"/><span
+        style="color:#bababa;">border-top</span>: <span style="color:#6d9cbe;">$width </span><span
+        style="color:#a5c261;">solid transparent<br/></span><span style="color:#a5c261;"/><span style="color:#bababa;">border-bottom</span>: <span
+        style="color:#6d9cbe;">$width </span><span style="color:#a5c261;">solid transparent<br/></span><span
+        style="color:#a5c261;"/><span style="color:#bababa;">border-left</span>: <span
+        style="color:#6d9cbe;">$height </span><span style="color:#a5c261;">solid </span><span
+        style="color:#6d9cbe;">$</span><span style="color:#6d9cbe;background-color:#344134;">color</span><span
+        style="color:#6d9cbe;"><br/></span><span style="color:#6d9cbe;"/><span
+        style="color:#cc7832;">@else if </span><span style="color:#6d9cbe;">$direction </span>== <span
+        style="color:#6a8759;">'bottom'<br/></span><span style="color:#6a8759;"/><span style="color:#bababa;">border-left</span>: <span
+        style="color:#6d9cbe;">$width </span><span style="color:#a5c261;">solid transparent<br/></span><span
+        style="color:#a5c261;"/><span style="color:#bababa;">border-right</span>: <span
+        style="color:#6d9cbe;">$width </span><span style="color:#a5c261;">solid transparent<br/></span><span
+        style="color:#a5c261;"/><span style="color:#bababa;">border-top</span>: <span
+        style="color:#6d9cbe;">$height </span><span style="color:#a5c261;">solid </span><span
+        style="color:#6d9cbe;">$</span><span style="color:#6d9cbe;background-color:#344134;">color</span>
+</pre>
+</div>
+<div>     这个混合器（function）的功能就是画出一个正三角。</div>
+<div>     由于如果设置一个元素，这个元素的宽高都是0，然后设置他的边框，那么他的边框将撑起整个元素，而如果我们不设置border-top，那么上边那条边将不会被撑起，这样左右的边框就会搭起来，变成一个三角。</div>
+<div><img
+        src="./纯CSS方块转化梯形动画/B74317C3-6977-4708-855E-EF5AC032047D.png" style="width: 45% !important;"/><img
+        src="./纯CSS方块转化梯形动画/F07A81AD-2F8B-4078-9EA5-2997194CA395.png" style="width: 30% !important;"/></div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:9.0pt;"><span
+            style="color:#cc7832;">div<br/></span><span style="color:#cc7832;"> </span> <span style="color:#bababa;">width</span>: <span
+            style="color:#6897bb;">0<br/></span><span style="color:#6897bb;"> </span> <span style="color:#bababa;">height</span>: <span
+            style="color:#6897bb;">0<br/></span><span style="color:#6897bb;"> </span> <span style="color:#bababa;">border-left</span>: <span
+            style="color:#6897bb;">200</span><span style="color:#a5c261;">px solid transparent<br/></span><span
+            style="color:#a5c261;"> </span> <span style="color:#bababa;">border-right</span>: <span
+            style="color:#6897bb;">100</span><span style="color:#a5c261;">px solid transparent<br/></span><span
+            style="color:#a5c261;"> </span> <span style="color:#bababa;">border-bottom</span>: <span
+            style="color:#6897bb;">200</span><span style="color:#a5c261;">px solid </span><span style="color:#6d9cbe;">$btn_green<br/></span><span
+            style="color:#6d9cbe;"> </span> <span style="color:#bababa;">margin</span>: <span
+            style="color:#6897bb;">0 </span><span style="color:#a5c261;">auto </span><span
+            style="color:#6897bb;">50</span><span style="color:#a5c261;">px</span><br/></div>
+</div>
+<div><span style="font-size: 24px;">二.    再画一个梯形</span></div>
+<div>     理解了以上如何画三角，那么我们来想一下如何画出一个梯形，基于之前的理论，如果我们设置一个三角元素的宽，那么这个梯形就会形如：</div>
+<div>     顶 = width；</div>
+<div>     底 = width + border-left + border-right；</div>
+<div>     高 = border-bottom(top)</div>
+<div><img
+        src="./纯CSS方块转化梯形动画/EA13D67F-BB8E-4B35-AB8E-5F41D6FDAF34.png" style="width: 45% !important;"/><img
+        src="./纯CSS方块转化梯形动画/51FB19EB-9345-40A0-BB75-250478F77D22.png" style="width: 30% !important;"/></div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:9.0pt;"><span
+            style="color:#cc7832;">div<br/></span><span style="color:#cc7832;"> </span> <span style="color:#bababa;">width</span>: <span
+            style="color:#6897bb;">50</span><span style="color:#a5c261;">px<br/></span><span
+            style="color:#a5c261;"> </span> <span style="color:#bababa;">border-left</span>: <span
+            style="color:#6897bb;">200</span><span style="color:#a5c261;">px solid transparent<br/></span><span
+            style="color:#a5c261;"> </span> <span style="color:#bababa;">border-right</span>: <span
+            style="color:#6897bb;">100</span><span style="color:#a5c261;">px solid transparent<br/></span><span
+            style="color:#a5c261;"> </span> <span style="color:#bababa;">border-bottom</span>: <span
+            style="color:#6897bb;">200</span><span style="color:#a5c261;">px solid </span><span style="color:#6d9cbe;">$btn_green<br/></span><span
+            style="color:#6d9cbe;"> </span> <span style="color:#bababa;">margin</span>: <span
+            style="color:#6897bb;">0 </span><span style="color:#a5c261;">auto </span><span
+            style="color:#6897bb;">50</span><span style="color:#a5c261;">px</span><br/></div>
+</div>
+<div><br/></div>
+<div><span style="font-size: 24px;">三.     方块变梯形，变身。</span></div>
+<div>     完成了上述两个『mission』之后，我们要实现的动画就会比较简单了，只是在要改变的元素上添加上动画就可以，然后在 hover 样式中将正方形变成梯形即可完成变身。</div>
+<div class="test">
+    <div class="left"></div>
+    <div class="right"></div>
+</div>
+<div class="code">
+    <div style="background-color:#2b2b2b;color:#a9b7c6;font-family:'Menlo';font-size:9.0pt;">.<span
+            style="color:#e8bf6a;">test<br/></span><span style="color:#e8bf6a;"> </span> <span style="color:#bababa;">margin</span>: <span
+            style="color:#6897bb;">100</span><span style="color:#a5c261;">px auto </span><span
+            style="color:#6897bb;">0<br/></span><span style="color:#6897bb;"> </span> <span
+            style="color:#bababa;">width</span>: <span style="color:#6897bb;">1180</span><span style="color:#a5c261;">px<br/></span><span
+            style="color:#a5c261;"> </span> <span style="color:#bababa;">height</span>: <span
+            style="color:#6897bb;">590</span><span style="color:#a5c261;">px<br/></span><span
+            style="color:#a5c261;"> </span> <span style="color:#bababa;">position</span>: <span style="color:#a5c261;">relative<br/></span><span
+            style="color:#a5c261;"> </span> &gt; <span style="color:#cc7832;">div<br/></span><span
+            style="color:#cc7832;">   </span> <span style="color:#bababa;">height</span>: <span style="color:#6897bb;">500</span><span
+            style="color:#a5c261;">px<br/></span><span style="color:#a5c261;">   </span> <span style="color:#bababa;">float</span>: <span
+            style="color:#a5c261;">left<br/></span><span style="color:#a5c261;">   </span> <span style="color:#bababa;">cursor</span>: <span
+            style="color:#a5c261;">pointer<br/></span><span style="color:#a5c261;">   </span> <span
+            style="color:#bababa;">z-index</span>: <span style="color:#6897bb;">5<br/></span><span
+            style="color:#6897bb;">   </span> <span style="color:#cc7832;">@include </span><span style="color:#e8bf6a;">transition</span>(<span
+            style="color:#a5c261;">all </span><span style="color:#6897bb;">.5</span><span style="color:#a5c261;">s ease-out</span>)<br/>
+          &gt; .<span style="color:#e8bf6a;">left<br/></span><span style="color:#e8bf6a;">   </span> <span
+                style="color:#bababa;">position</span>: <span style="color:#a5c261;">absolute<br/></span><span
+                style="color:#a5c261;">   </span> <span style="color:#bababa;">top</span>: <span style="color:#6897bb;">0<br/></span><span
+                style="color:#6897bb;">   </span> <span style="color:#bababa;">left</span>: <span
+                style="color:#6897bb;">0<br/></span><span style="color:#6897bb;">   </span> <span
+                style="color:#bababa;">width</span>: <span style="color:#6897bb;">50</span>%<br/>
+            <span style="color:#bababa;">height</span>: <span style="color:#6897bb;">0<br/></span><span
+                style="color:#6897bb;">   </span> <span style="color:#bababa;">border-left</span>: <span
+                style="color:#6897bb;">0 </span><span style="color:#a5c261;">solid transparent<br/></span><span
+                style="color:#a5c261;">   </span> <span style="color:#bababa;">border-right</span>: <span
+                style="color:#6897bb;">0 </span><span style="color:#a5c261;">solid transparent<br/></span><span
+                style="color:#a5c261;">   </span> <span style="color:#bababa;">border-bottom</span>: <span
+                style="color:#6897bb;">250</span><span style="color:#a5c261;">px solid </span><span
+                style="color:#6d9cbe;">$btn_green<br/></span><span style="color:#6d9cbe;">   </span> &amp;:<span
+                style="color:#e8bf6a;">hover<br/></span><span style="color:#e8bf6a;">     </span> <span
+                style="color:#bababa;">border-right</span>: <span style="color:#6897bb;">500</span>-<span
+                style="color:#6897bb;">60</span><span style="color:#a5c261;">px solid transparent<br/></span><span
+                style="color:#a5c261;">     </span> <span style="color:#bababa;">z-index</span>: <span
+                style="color:#6897bb;">10<br/></span><span style="color:#6897bb;">     </span> <span
+                style="color:#bababa;">width</span>: <span style="color:#6897bb;">590</span>+<span
+                style="color:#6897bb;">150</span><span style="color:#a5c261;">px<br/></span><span
+                style="color:#a5c261;"> </span> &gt; .<span style="color:#e8bf6a;">right<br/></span><span
+                style="color:#e8bf6a;">   </span> <span style="color:#bababa;">position</span>: <span
+                style="color:#a5c261;">absolute<br/></span><span style="color:#a5c261;">   </span> <span
+                style="color:#bababa;">top</span>: <span style="color:#6897bb;">0<br/></span><span
+                style="color:#6897bb;">   </span> <span style="color:#bababa;">right</span>: <span
+                style="color:#6897bb;">0<br/></span><span style="color:#6897bb;">   </span> <span
+                style="color:#bababa;">width</span>: <span style="color:#6897bb;">50</span>%<br/>
+            <span style="color:#bababa;">height</span>: <span style="color:#6897bb;">0<br/></span><span
+                style="color:#6897bb;">   </span> <span style="color:#bababa;">border-left</span>: <span
+                style="color:#6897bb;">0 </span><span style="color:#a5c261;">solid transparent<br/></span><span
+                style="color:#a5c261;">   </span> <span style="color:#bababa;">border-right</span>: <span
+                style="color:#6897bb;">0 </span><span style="color:#a5c261;">solid transparent<br/></span><span
+                style="color:#a5c261;">   </span> <span style="color:#bababa;">border-bottom</span>: <span
+                style="color:#6897bb;">250</span><span style="color:#a5c261;">px solid </span><span
+                style="color:#6d9cbe;">$btn_orange<br/></span><span style="color:#6d9cbe;">   </span> &amp;:<span
+                style="color:#e8bf6a;">hover<br/></span><span style="color:#e8bf6a;">     </span> <span
+                style="color:#bababa;">border-left</span>: <span style="color:#6897bb;">500</span>-<span
+                style="color:#6897bb;">60</span><span style="color:#a5c261;">px solid transparent<br/></span><span
+                style="color:#a5c261;">     </span> <span style="color:#bababa;">z-index</span>: <span
+                style="color:#6897bb;">10<br/></span><span style="color:#6897bb;">     </span> <span
+                style="color:#bababa;">width</span>: <span style="color:#6897bb;">590</span>+<span
+                style="color:#6897bb;">150</span><span style="color:#a5c261;">px</span><br/></div>
+</div>
+<div><br/></div>
+</body>
+</html>

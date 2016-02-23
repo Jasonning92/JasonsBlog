@@ -1,0 +1,55 @@
+/* easy-animation.scss */
+/* line 2, ../../sass/Module/test.sass */
+
+/* line 5, ../../sass/Module/test.sass */
+.test {
+  margin: 100px auto 0;
+  width: 1180px;
+  height: 350px;
+  position: relative;
+}
+/* line 10, ../../sass/Module/test.sass */
+.test > div {
+  height: 500px;
+  float: left;
+  cursor: pointer;
+  z-index: 5;
+  -moz-transition: all 0.5s ease-out;
+  -o-transition: all 0.5s ease-out;
+  -webkit-transition: all 0.5s ease-out;
+  transition: all 0.5s ease-out;
+}
+/* line 16, ../../sass/Module/test.sass */
+.test > .left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 0;
+  border-left: 0 solid transparent;
+  border-right: 0 solid transparent;
+  border-bottom: 250px solid #30AB75;
+}
+/* line 25, ../../sass/Module/test.sass */
+.test > .left:hover {
+  border-right: 440px solid transparent;
+  z-index: 10;
+  width: 740px;
+}
+/* line 29, ../../sass/Module/test.sass */
+.test > .right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 0;
+  border-left: 0 solid transparent;
+  border-right: 0 solid transparent;
+  border-bottom: 250px solid #fd703a;
+}
+/* line 38, ../../sass/Module/test.sass */
+.test > .right:hover {
+  border-left: 440px solid transparent;
+  z-index: 10;
+  width: 740px;
+}

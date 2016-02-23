@@ -8,7 +8,7 @@ body > div {
   line-height: 25px;
 }
 /* line 7, ../sass/iframe.sass */
-body > div.code > div {
+body > div.code > * {
   padding: 15px;
 }
 /* line 9, ../sass/iframe.sass */

@@ -2,8 +2,48 @@
    Created by Jason on 15/12/14.
 doctype html
 html(lang="zh-cmn-Hans")
-head
-    //include Components/Meta&Script/head
-    title 课件详情
-body
-    h1 测试
+    head
+        include Components/Meta&Script/head
+        title JasonNing'sBlog
+        script(src="Scripts/index.js")
+    body
+        header.index
+            div
+                h1 JasonNing's Blog
+                span C#程序猿现在是前端攻城狮啦~
+        header.page
+            div
+                h1 JasonNing's Blog
+                a(href="../index.html") 返回首页
+        section#main_div
+            .bloglist
+                a.one(href="pages/纯CSS方块转化梯形动画.html")
+                    div.title
+                        h1 纯CSS方块转化梯形动画
+                        span 所属笔记本：前端那些事
+                    div.content
+                        p 纯css实现一个矩形到梯形转化的动画
+                a.one(href="pages/tips.html")
+                    div.title
+                        h1 js & css中的小tips
+                        span 所属笔记本：前端那些事
+                    div.content
+                        p 分享一些写css和js时的小tips
+                a.one(href="pages/OAuth 2.0.html")
+                    div.title
+                        h1 关于 OAuth 2.0 Authorization Framework
+                        span 所属笔记本：WebAPI
+                    div.content
+                        p 之前研究了一下OAuth 2.0验证框架的问题
+                a.one(href="pages/devModel.html")
+                    div.title
+                        h1 关于前端开发模式
+                        span 所属笔记本：前端那些事
+                    div.content
+                        p 对于前端模块化开发的探讨与实践方式，包含使用jade实现模块化开发
+                a.one(href="pages/HTML5缓存机制浅析.html")
+                    div.title
+                        h1 HTML5缓存机制浅析：移动端Web加载性能优化（转载）
+                        span 所属笔记本：前端那些事
+                    div.content
+                        p 转载自csdn得一篇页面缓存机制的文章。

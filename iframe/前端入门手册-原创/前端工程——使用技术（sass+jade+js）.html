@@ -511,10 +511,32 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 
 <div class="main_div2_3-1"><div class="father"><div class="left a">A</div><div class="right"><div class="b">B</div><div class="c">C</div></div></div></div>
 
-<p>　　首先，我们需要西安区分出左右两个区域，这样在右侧区域我们才可以用百分比设置宽度。这样做会造成是2层的结构，使得页面看起来并不『爽』。<br/>
+<p>　　首先，我们需要西安区分出左右两个区域，这样在右侧区域我们才可以用百分比设置宽度。这样做会造成是3层的结构，使得页面看起来并不『爽』。<br/>
 　　<br/>
-　　<strong>那么现在</strong>，我们使用 flexbox 来实现这个情景。　<br/>
-　　</p>
+　　<strong>那么现在</strong>，我们使用 flexbox 来实现这个情景。　</p>
+
+<pre><code>.father
+    height: 50px
+    display: flex
+    &gt; .a
+        width: 100px
+        flex: none
+    &gt; .b
+        flex-grow: 1
+    &gt; .c
+        flex-grow: 3
+</code></pre>
+
+<pre><code class="language-html">&lt;div class=&quot;father&quot;&gt;
+    &lt;div class=&quot;a&quot;&gt;A&lt;/div&gt;
+    &lt;div class=&quot;b&quot;&gt;B&lt;/div&gt;
+    &lt;div class=&quot;c&quot;&gt;C&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+<div class="main_div2_3-2"><div class="father"><div class="a">A</div><div class="b">B</div><div class="c">C</div></div></div>
+
+<p>　　这样我们就只用了2层结构就实现了这样的效果。而且也十分契合情景的描述。</p>
 
 </div></body>
 

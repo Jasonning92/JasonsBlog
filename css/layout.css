@@ -113,7 +113,13 @@ body {
   text-decoration: underline;
 }
 
-/* line 69, ../sass/layout.sass */
+@media (max-width: 1180px) {
+  /* line 70, ../sass/layout.sass */
+  #main_div {
+    width: 100%;
+  }
+}
+/* line 73, ../sass/layout.sass */
 header.page {
   width: 100%;
   background-color: #3a424d;
@@ -121,13 +127,13 @@ header.page {
   top: 0;
   left: 0;
 }
-/* line 75, ../sass/layout.sass */
+/* line 79, ../sass/layout.sass */
 header.page > div {
   width: 1180px;
   height: 40px;
   margin: 0 auto;
 }
-/* line 79, ../sass/layout.sass */
+/* line 83, ../sass/layout.sass */
 header.page > div > h1 {
   height: 40px;
   line-height: 40px;
@@ -135,7 +141,7 @@ header.page > div > h1 {
   color: #FFFFFF;
   font-size: 20px;
 }
-/* line 85, ../sass/layout.sass */
+/* line 89, ../sass/layout.sass */
 header.page > div > a {
   float: right;
   height: 100%;
@@ -146,18 +152,18 @@ header.page > div > a {
   background-color: #556375;
   font-size: 14px;
 }
-/* line 94, ../sass/layout.sass */
+/* line 98, ../sass/layout.sass */
 header.page > div > a:hover {
   background-color: #9975ab;
 }
 
-/* line 96, ../sass/layout.sass */
+/* line 100, ../sass/layout.sass */
 .blogiframe {
   width: 100%;
   margin-top: 40px;
   display: inline-block;
 }
-/* line 100, ../sass/layout.sass */
+/* line 104, ../sass/layout.sass */
 .blogiframe > .nav {
   padding: 10px;
   margin: 20px 0;
@@ -167,20 +173,20 @@ header.page > div > a:hover {
   -webkit-box-shadow: 2px 0 1px rgba(226, 224, 227, 0.5), -2px 0 1px rgba(226, 224, 227, 0.5), 0 2px 1px rgba(226, 224, 227, 0.5), 0 -2px 1px rgba(226, 224, 227, 0.5);
   box-shadow: 2px 0 1px rgba(226, 224, 227, 0.5), -2px 0 1px rgba(226, 224, 227, 0.5), 0 2px 1px rgba(226, 224, 227, 0.5), 0 -2px 1px rgba(226, 224, 227, 0.5);
 }
-/* line 106, ../sass/layout.sass */
+/* line 110, ../sass/layout.sass */
 .blogiframe > .nav > a {
   color: #858e97;
 }
-/* line 108, ../sass/layout.sass */
+/* line 112, ../sass/layout.sass */
 .blogiframe > .nav > a:hover {
   color: #9975ab;
 }
-/* line 110, ../sass/layout.sass */
+/* line 114, ../sass/layout.sass */
 .blogiframe > .nav > span {
   color: #454f59;
   padding: 0 10px;
 }
-/* line 113, ../sass/layout.sass */
+/* line 117, ../sass/layout.sass */
 .blogiframe > iframe {
   width: 100%;
   background-color: #FFFFFF;

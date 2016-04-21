@@ -1,0 +1,410 @@
+/* line 50, ../_function.sass */
+.thom_picture {
+  background-image: url("/image/thom.jpg");
+}
+
+/* line 50, ../_function.sass */
+.jonny_picture {
+  background-image: url("/image/jonny.jpg");
+}
+
+/* line 50, ../_function.sass */
+.colin_picture {
+  background-image: url("/image/colin.jpg");
+}
+
+/* line 50, ../_function.sass */
+.phil_picture {
+  background-image: url("/image/phil.jpg");
+}
+
+/* easy-animation.scss */
+/* line 3, ../sass/style.sass */
+.myBlog-font-Blue {
+  color: #60d7da;
+}
+
+/* line 6, ../sass/style.sass */
+h5 {
+  color: #fc7039;
+  font-size: 18px;
+}
+
+/* line 10, ../sass/style.sass */
+em {
+  color: #34b27c;
+}
+
+/* line 14, ../sass/style.sass */
+.main_div2_1 .father {
+  display: flex;
+}
+/* line 16, ../sass/style.sass */
+.main_div2_1 .father > div {
+  height: 150px;
+  line-height: 150px;
+  text-align: center;
+  color: #676767;
+  font-size: 24px;
+}
+/* line 22, ../sass/style.sass */
+.main_div2_1 .father > .leftChild {
+  flex: none;
+  width: 300px;
+  background-color: #5ad7db;
+}
+/* line 26, ../sass/style.sass */
+.main_div2_1 .father > .rightChild {
+  flex: 2;
+  background-color: #46c37b;
+}
+
+/* line 31, ../sass/style.sass */
+.main_div2_2 .father {
+  height: 50px;
+}
+/* line 33, ../sass/style.sass */
+.main_div2_2 .father > div {
+  height: 100%;
+  width: 10%;
+  margin: 0 5%;
+  float: left;
+  line-height: 50px;
+  text-align: center;
+  color: #676767;
+  font-size: 24px;
+}
+/* line 42, ../sass/style.sass */
+.main_div2_2 .father > div:nth-of-type(1) {
+  background-color: #8ae2e6;
+}
+/* line 44, ../sass/style.sass */
+.main_div2_2 .father > div:nth-of-type(2) {
+  background-color: #5ad7db;
+}
+/* line 46, ../sass/style.sass */
+.main_div2_2 .father > div:nth-of-type(3) {
+  background-color: #7dced1;
+}
+/* line 48, ../sass/style.sass */
+.main_div2_2 .father > div:nth-of-type(4) {
+  background-color: #27ad74;
+}
+/* line 50, ../sass/style.sass */
+.main_div2_2 .father > div:nth-of-type(5) {
+  background-color: #33CC00;
+}
+
+/* line 54, ../sass/style.sass */
+.main_div2_2-2 .father {
+  height: 50px;
+  display: flex;
+  justify-content: space-around;
+}
+/* line 58, ../sass/style.sass */
+.main_div2_2-2 .father > div {
+  width: 10%;
+  height: 100%;
+  line-height: 50px;
+  text-align: center;
+  color: #676767;
+  font-size: 24px;
+}
+/* line 65, ../sass/style.sass */
+.main_div2_2-2 .father > div:nth-of-type(1) {
+  background-color: #8ae2e6;
+}
+/* line 67, ../sass/style.sass */
+.main_div2_2-2 .father > div:nth-of-type(2) {
+  background-color: #5ad7db;
+}
+/* line 69, ../sass/style.sass */
+.main_div2_2-2 .father > div:nth-of-type(3) {
+  background-color: #7dced1;
+}
+/* line 71, ../sass/style.sass */
+.main_div2_2-2 .father > div:nth-of-type(4) {
+  background-color: #27ad74;
+}
+/* line 73, ../sass/style.sass */
+.main_div2_2-2 .father > div:nth-of-type(5) {
+  background-color: #33CC00;
+}
+
+/* line 77, ../sass/style.sass */
+.main_div2_2-3 .father {
+  background-color: #fd6d6b;
+  width: 400px;
+  height: 50px;
+  display: flex;
+  justify-content: flex-start;
+}
+/* line 83, ../sass/style.sass */
+.main_div2_2-3 .father > div {
+  width: 30px;
+  height: 100%;
+  line-height: 50px;
+  text-align: center;
+  color: #676767;
+  font-size: 24px;
+}
+/* line 90, ../sass/style.sass */
+.main_div2_2-3 .father > div:nth-of-type(1) {
+  background-color: #8ae2e6;
+}
+/* line 92, ../sass/style.sass */
+.main_div2_2-3 .father > div:nth-of-type(2) {
+  background-color: #5ad7db;
+}
+/* line 94, ../sass/style.sass */
+.main_div2_2-3 .father > div:nth-of-type(3) {
+  background-color: #7dced1;
+}
+/* line 96, ../sass/style.sass */
+.main_div2_2-3 .father > div:nth-of-type(4) {
+  background-color: #27ad74;
+}
+/* line 98, ../sass/style.sass */
+.main_div2_2-3 .father > div:nth-of-type(5) {
+  background-color: #33CC00;
+}
+
+/* line 102, ../sass/style.sass */
+.main_div2_2-4 .father {
+  background-color: #fd6d6b;
+  width: 400px;
+  height: 50px;
+  display: flex;
+  justify-content: flex-end;
+}
+/* line 108, ../sass/style.sass */
+.main_div2_2-4 .father > div {
+  width: 30px;
+  height: 100%;
+  line-height: 50px;
+  text-align: center;
+  color: #676767;
+  font-size: 24px;
+}
+/* line 115, ../sass/style.sass */
+.main_div2_2-4 .father > div:nth-of-type(1) {
+  background-color: #8ae2e6;
+}
+/* line 117, ../sass/style.sass */
+.main_div2_2-4 .father > div:nth-of-type(2) {
+  background-color: #5ad7db;
+}
+/* line 119, ../sass/style.sass */
+.main_div2_2-4 .father > div:nth-of-type(3) {
+  background-color: #7dced1;
+}
+/* line 121, ../sass/style.sass */
+.main_div2_2-4 .father > div:nth-of-type(4) {
+  background-color: #27ad74;
+}
+/* line 123, ../sass/style.sass */
+.main_div2_2-4 .father > div:nth-of-type(5) {
+  background-color: #33CC00;
+}
+
+/* line 127, ../sass/style.sass */
+.main_div2_2-5 .father {
+  background-color: #fd6d6b;
+  width: 400px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+}
+/* line 133, ../sass/style.sass */
+.main_div2_2-5 .father > div {
+  width: 30px;
+  height: 100%;
+  line-height: 50px;
+  text-align: center;
+  color: #676767;
+  font-size: 24px;
+}
+/* line 140, ../sass/style.sass */
+.main_div2_2-5 .father > div:nth-of-type(1) {
+  background-color: #8ae2e6;
+}
+/* line 142, ../sass/style.sass */
+.main_div2_2-5 .father > div:nth-of-type(2) {
+  background-color: #5ad7db;
+}
+/* line 144, ../sass/style.sass */
+.main_div2_2-5 .father > div:nth-of-type(3) {
+  background-color: #7dced1;
+}
+/* line 146, ../sass/style.sass */
+.main_div2_2-5 .father > div:nth-of-type(4) {
+  background-color: #27ad74;
+}
+/* line 148, ../sass/style.sass */
+.main_div2_2-5 .father > div:nth-of-type(5) {
+  background-color: #33CC00;
+}
+
+/* line 152, ../sass/style.sass */
+.main_div2_2-6 .father {
+  background-color: #fd6d6b;
+  width: 400px;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+/* line 158, ../sass/style.sass */
+.main_div2_2-6 .father > div {
+  width: 30px;
+  height: 100%;
+  line-height: 50px;
+  text-align: center;
+  color: #676767;
+  font-size: 24px;
+}
+/* line 165, ../sass/style.sass */
+.main_div2_2-6 .father > div:nth-of-type(1) {
+  background-color: #8ae2e6;
+}
+/* line 167, ../sass/style.sass */
+.main_div2_2-6 .father > div:nth-of-type(2) {
+  background-color: #5ad7db;
+}
+/* line 169, ../sass/style.sass */
+.main_div2_2-6 .father > div:nth-of-type(3) {
+  background-color: #7dced1;
+}
+/* line 171, ../sass/style.sass */
+.main_div2_2-6 .father > div:nth-of-type(4) {
+  background-color: #27ad74;
+}
+/* line 173, ../sass/style.sass */
+.main_div2_2-6 .father > div:nth-of-type(5) {
+  background-color: #33CC00;
+}
+
+/* line 177, ../sass/style.sass */
+.main_div2_2-7 .father {
+  background-color: #fd6d6b;
+  width: 400px;
+  height: 50px;
+  display: flex;
+  justify-content: space-around;
+}
+/* line 183, ../sass/style.sass */
+.main_div2_2-7 .father > div {
+  width: 30px;
+  height: 100%;
+  line-height: 50px;
+  text-align: center;
+  color: #676767;
+  font-size: 24px;
+}
+/* line 190, ../sass/style.sass */
+.main_div2_2-7 .father > div:nth-of-type(1) {
+  background-color: #8ae2e6;
+}
+/* line 192, ../sass/style.sass */
+.main_div2_2-7 .father > div:nth-of-type(2) {
+  background-color: #5ad7db;
+}
+/* line 194, ../sass/style.sass */
+.main_div2_2-7 .father > div:nth-of-type(3) {
+  background-color: #7dced1;
+}
+/* line 196, ../sass/style.sass */
+.main_div2_2-7 .father > div:nth-of-type(4) {
+  background-color: #27ad74;
+}
+/* line 198, ../sass/style.sass */
+.main_div2_2-7 .father > div:nth-of-type(5) {
+  background-color: #33CC00;
+}
+
+/* line 202, ../sass/style.sass */
+.main_div2_3-1 .father {
+  height: 50px;
+  position: relative;
+}
+/* line 205, ../sass/style.sass */
+.main_div2_3-1 .father div {
+  height: 100%;
+  line-height: 50px;
+  text-align: center;
+  color: #676767;
+  font-size: 24px;
+}
+/* line 211, ../sass/style.sass */
+.main_div2_3-1 .father .a {
+  background-color: #8ae2e6;
+}
+/* line 213, ../sass/style.sass */
+.main_div2_3-1 .father .b {
+  background-color: #5ad7db;
+}
+/* line 215, ../sass/style.sass */
+.main_div2_3-1 .father .c {
+  background-color: #7dced1;
+}
+/* line 217, ../sass/style.sass */
+.main_div2_3-1 .father > .left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100px;
+}
+/* line 222, ../sass/style.sass */
+.main_div2_3-1 .father > .right {
+  padding-left: 100px;
+}
+/* line 224, ../sass/style.sass */
+.main_div2_3-1 .father > .right > * {
+  float: left;
+}
+/* line 226, ../sass/style.sass */
+.main_div2_3-1 .father > .right > .b {
+  width: 25%;
+}
+/* line 228, ../sass/style.sass */
+.main_div2_3-1 .father > .right > .c {
+  width: 75%;
+}
+
+/* line 232, ../sass/style.sass */
+.main_div2_3-2 .father {
+  height: 50px;
+  display: flex;
+}
+/* line 235, ../sass/style.sass */
+.main_div2_3-2 .father div {
+  height: 100%;
+  line-height: 50px;
+  text-align: center;
+  color: #676767;
+  font-size: 24px;
+}
+/* line 241, ../sass/style.sass */
+.main_div2_3-2 .father .a {
+  background-color: #8ae2e6;
+}
+/* line 243, ../sass/style.sass */
+.main_div2_3-2 .father .b {
+  background-color: #5ad7db;
+}
+/* line 245, ../sass/style.sass */
+.main_div2_3-2 .father .c {
+  background-color: #7dced1;
+}
+/* line 247, ../sass/style.sass */
+.main_div2_3-2 .father > .a {
+  width: 100px;
+  flex: none;
+}
+/* line 250, ../sass/style.sass */
+.main_div2_3-2 .father > .b {
+  flex-grow: 1;
+}
+/* line 252, ../sass/style.sass */
+.main_div2_3-2 .father > .c {
+  flex-grow: 3;
+}

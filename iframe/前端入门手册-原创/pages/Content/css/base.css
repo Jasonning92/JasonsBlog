@@ -1,0 +1,436 @@
+/* line 50, ../_function.sass */
+.thom_picture {
+  background-image: url("/image/thom.jpg");
+}
+
+/* line 50, ../_function.sass */
+.jonny_picture {
+  background-image: url("/image/jonny.jpg");
+}
+
+/* line 50, ../_function.sass */
+.colin_picture {
+  background-image: url("/image/colin.jpg");
+}
+
+/* line 50, ../_function.sass */
+.phil_picture {
+  background-image: url("/image/phil.jpg");
+}
+
+/* easy-animation.scss */
+/* line 3, ../sass/base.sass */
+html {
+  font-family: microsoft yahei;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+/* line 8, ../sass/base.sass */
+body, p, label, ul, li {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 12, ../sass/base.sass */
+article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
+  display: block;
+}
+
+/* line 15, ../sass/base.sass */
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+/* line 22, ../sass/base.sass */
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+/* line 26, ../sass/base.sass */
+[hidden], template {
+  display: none;
+}
+
+/* line 29, ../sass/base.sass */
+a {
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/* line 35, ../sass/base.sass */
+a:active, a:hover {
+  outline: 0;
+}
+
+/* line 38, ../sass/base.sass */
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+
+/* line 41, ../sass/base.sass */
+b, strong {
+  font-weight: bold;
+}
+
+/* line 44, ../sass/base.sass */
+dfn {
+  font-style: italic;
+}
+
+/* line 47, ../sass/base.sass */
+mark {
+  color: #000;
+  background: #ff0;
+}
+
+/* line 51, ../sass/base.sass */
+small {
+  font-size: 80%;
+}
+
+/* line 54, ../sass/base.sass */
+sub, sup {
+  position: relative;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+/* line 60, ../sass/base.sass */
+sup {
+  top: -0.5em;
+}
+
+/* line 63, ../sass/base.sass */
+sub {
+  bottom: -0.25em;
+}
+
+/* line 66, ../sass/base.sass */
+img {
+  border: 0;
+}
+
+/* line 69, ../sass/base.sass */
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* line 72, ../sass/base.sass */
+figure {
+  margin: 1em 40px;
+}
+
+/* line 75, ../sass/base.sass */
+hr {
+  height: 0;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+/* line 81, ../sass/base.sass */
+pre {
+  overflow: auto;
+}
+
+/* line 84, ../sass/base.sass */
+code, kbd, pre, samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+/* line 88, ../sass/base.sass */
+button, input, optgroup, select, textarea {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
+/* line 93, ../sass/base.sass */
+button {
+  overflow: visible;
+  border: none;
+  padding: 0;
+  background-color: inherit;
+}
+
+/* line 99, ../sass/base.sass */
+button, select {
+  text-transform: none;
+}
+
+/* line 102, ../sass/base.sass */
+button, html input[type="button"], input[type="reset"], input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+
+/* line 106, ../sass/base.sass */
+button[disabled], html input[disabled] {
+  cursor: default;
+}
+
+/* line 109, ../sass/base.sass */
+button::-moz-focus-inner, input::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+/* line 113, ../sass/base.sass */
+input {
+  line-height: normal;
+  padding: 0;
+}
+
+/* line 117, ../sass/base.sass */
+input[type="checkbox"], input[type="radio"] {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+/* line 123, ../sass/base.sass */
+input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/* line 126, ../sass/base.sass */
+input[type="search"] {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  -webkit-appearance: textfield;
+}
+
+/* line 132, ../sass/base.sass */
+input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/* line 135, ../sass/base.sass */
+input:focus, textarea:focus, button:focus, a:focus {
+  outline: inherit;
+}
+
+/* line 138, ../sass/base.sass */
+input:focus, textarea:focus {
+  border: 1px solid #5ad7db !important;
+}
+
+/* line 141, ../sass/base.sass */
+fieldset {
+  padding: 0.35em 0.625em 0.75em;
+  margin: 0 2px;
+  border: 1px solid #c0c0c0;
+}
+
+/* line 146, ../sass/base.sass */
+legend {
+  padding: 0;
+  border: 0;
+}
+
+/* line 150, ../sass/base.sass */
+textarea {
+  overflow: auto;
+}
+
+/* line 153, ../sass/base.sass */
+optgroup {
+  font-weight: bold;
+}
+
+/* line 156, ../sass/base.sass */
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+/* line 160, ../sass/base.sass */
+td, th {
+  padding: 0;
+}
+
+/* line 163, ../sass/base.sass */
+iframe {
+  border: none;
+}
+
+/* line 166, ../sass/base.sass */
+ul {
+  list-style: none;
+}
+
+/* line 169, ../sass/base.sass */
+h1, h2, h3, h4, h5 {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 174, ../sass/base.sass */
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* line 179, ../sass/base.sass */
+h2 {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+/* line 184, ../sass/base.sass */
+h3 {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+/* line 189, ../sass/base.sass */
+span, p {
+  font-size: 16px;
+}
+
+/* line 193, ../sass/base.sass */
+i {
+  font-size: 16px;
+  font-style: normal;
+}
+
+/* line 198, ../sass/base.sass */
+em {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+/* line 202, ../sass/base.sass */
+.hex-imgBtn {
+  display: inline-block;
+  height: 26px;
+  border-radius: 3px;
+}
+/* line 206, ../sass/base.sass */
+.hex-imgBtn > i {
+  height: 100%;
+  width: 26px;
+  display: block;
+  background-repeat: no-repeat;
+  background-position: center;
+  float: left;
+  -moz-border-radius-topleft: 3px;
+  -webkit-border-top-left-radius: 3px;
+  border-top-left-radius: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+/* line 215, ../sass/base.sass */
+.hex-imgBtn > span {
+  padding: 0 8px;
+  line-height: 26px;
+  font-size: 14px;
+}
+
+/* line 220, ../sass/base.sass */
+.hex-smallBtn {
+  display: inline-block;
+  height: 26px;
+  border-radius: 3px;
+  text-align: center;
+  padding: 0 8px;
+  line-height: 26px;
+  font-size: 14px;
+}
+
+/* line 229, ../sass/base.sass */
+.hex-normalBtn {
+  height: 34px;
+  padding: 0 15px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+/* line 235, ../sass/base.sass */
+.hex-blueBtn {
+  background-color: #60d7da;
+  color: #FFFFFF;
+}
+/* line 238, ../sass/base.sass */
+.hex-blueBtn > i {
+  background-color: #8ae2e6;
+}
+/* line 240, ../sass/base.sass */
+.hex-blueBtn:hover {
+  background-color: #55c3c7;
+}
+/* line 242, ../sass/base.sass */
+.hex-blueBtn:hover > i {
+  background-color: #7dced1;
+}
+
+/* line 245, ../sass/base.sass */
+.hex-redBtn {
+  background-color: #ff6c68;
+  color: #FFFFFF;
+}
+/* line 248, ../sass/base.sass */
+.hex-redBtn > i {
+  background-color: #8ae2e6;
+}
+/* line 250, ../sass/base.sass */
+.hex-redBtn:hover {
+  background-color: #eb6560;
+}
+/* line 252, ../sass/base.sass */
+.hex-redBtn:hover > i {
+  background-color: #7dced1;
+}
+
+/* line 255, ../sass/base.sass */
+.hex-grayBtn {
+  background-color: #999999;
+  color: #FFFFFF;
+}
+/* line 258, ../sass/base.sass */
+.hex-grayBtn:hover {
+  background-color: #55c3c7;
+}
+
+/* line 262, ../sass/base.sass */
+.hex-K12-loading {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+/* line 270, ../sass/base.sass */
+.hex-K12-loading > div {
+  width: 400px;
+  height: 200px;
+  border-radius: 5px;
+  border: 1px solid #e6e6e6;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: #FFFFFF;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../images/loading.gif");
+}

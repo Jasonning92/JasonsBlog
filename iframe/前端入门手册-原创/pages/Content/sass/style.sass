@@ -1,0 +1,253 @@
+@import "../import"
+
+.myBlog-font-Blue
+  color: $font_light_blue
+
+h5
+  color: $font_orange
+  font-size: 18px
+
+em
+  color: $font_green
+//====================================================== flexbox =========================================================
+.main_div2_1
+  .father
+    display: flex
+    > div
+      height: 150px
+      line-height: 150px
+      text-align: center
+      color: $font_gray
+      font-size: 24px
+    > .leftChild
+      flex: none
+      width: 300px
+      background-color: #5ad7db
+    > .rightChild
+      flex: 2
+      background-color: #46c37b
+
+.main_div2_2
+  .father
+    height: 50px
+    > div
+      height: 100%
+      width: 10%
+      margin: 0 5%
+      float: left
+      line-height: 50px
+      text-align: center
+      color: $font_gray
+      font-size: 24px
+      &:nth-of-type(1)
+        background-color: #8ae2e6
+      &:nth-of-type(2)
+        background-color: #5ad7db
+      &:nth-of-type(3)
+        background-color: #7dced1
+      &:nth-of-type(4)
+        background-color: #27ad74
+      &:nth-of-type(5)
+        background-color: #33CC00
+
+.main_div2_2-2
+  .father
+    height: 50px
+    display: flex
+    justify-content: space-around
+    > div
+      width: 10%
+      height: 100%
+      line-height: 50px
+      text-align: center
+      color: $font_gray
+      font-size: 24px
+      &:nth-of-type(1)
+        background-color: #8ae2e6
+      &:nth-of-type(2)
+        background-color: #5ad7db
+      &:nth-of-type(3)
+        background-color: #7dced1
+      &:nth-of-type(4)
+        background-color: #27ad74
+      &:nth-of-type(5)
+        background-color: #33CC00
+
+.main_div2_2-3
+  .father
+    background-color: #fd6d6b
+    width: 400px
+    height: 50px
+    display: flex
+    justify-content: flex-start
+    > div
+      width: 30px
+      height: 100%
+      line-height: 50px
+      text-align: center
+      color: $font_gray
+      font-size: 24px
+      &:nth-of-type(1)
+        background-color: #8ae2e6
+      &:nth-of-type(2)
+        background-color: #5ad7db
+      &:nth-of-type(3)
+        background-color: #7dced1
+      &:nth-of-type(4)
+        background-color: #27ad74
+      &:nth-of-type(5)
+        background-color: #33CC00
+
+.main_div2_2-4
+  .father
+    background-color: #fd6d6b
+    width: 400px
+    height: 50px
+    display: flex
+    justify-content: flex-end
+    > div
+      width: 30px
+      height: 100%
+      line-height: 50px
+      text-align: center
+      color: $font_gray
+      font-size: 24px
+      &:nth-of-type(1)
+        background-color: #8ae2e6
+      &:nth-of-type(2)
+        background-color: #5ad7db
+      &:nth-of-type(3)
+        background-color: #7dced1
+      &:nth-of-type(4)
+        background-color: #27ad74
+      &:nth-of-type(5)
+        background-color: #33CC00
+
+.main_div2_2-5
+  .father
+    background-color: #fd6d6b
+    width: 400px
+    height: 50px
+    display: flex
+    justify-content: center
+    > div
+      width: 30px
+      height: 100%
+      line-height: 50px
+      text-align: center
+      color: $font_gray
+      font-size: 24px
+      &:nth-of-type(1)
+        background-color: #8ae2e6
+      &:nth-of-type(2)
+        background-color: #5ad7db
+      &:nth-of-type(3)
+        background-color: #7dced1
+      &:nth-of-type(4)
+        background-color: #27ad74
+      &:nth-of-type(5)
+        background-color: #33CC00
+
+.main_div2_2-6
+  .father
+    background-color: #fd6d6b
+    width: 400px
+    height: 50px
+    display: flex
+    justify-content: space-between
+    > div
+      width: 30px
+      height: 100%
+      line-height: 50px
+      text-align: center
+      color: $font_gray
+      font-size: 24px
+      &:nth-of-type(1)
+        background-color: #8ae2e6
+      &:nth-of-type(2)
+        background-color: #5ad7db
+      &:nth-of-type(3)
+        background-color: #7dced1
+      &:nth-of-type(4)
+        background-color: #27ad74
+      &:nth-of-type(5)
+        background-color: #33CC00
+
+.main_div2_2-7
+  .father
+    background-color: #fd6d6b
+    width: 400px
+    height: 50px
+    display: flex
+    justify-content: space-around
+    > div
+      width: 30px
+      height: 100%
+      line-height: 50px
+      text-align: center
+      color: $font_gray
+      font-size: 24px
+      &:nth-of-type(1)
+        background-color: #8ae2e6
+      &:nth-of-type(2)
+        background-color: #5ad7db
+      &:nth-of-type(3)
+        background-color: #7dced1
+      &:nth-of-type(4)
+        background-color: #27ad74
+      &:nth-of-type(5)
+        background-color: #33CC00
+
+.main_div2_3-1
+  .father
+    height: 50px
+    position: relative
+    div
+      height: 100%
+      line-height: 50px
+      text-align: center
+      color: $font_gray
+      font-size: 24px
+    .a
+      background-color: #8ae2e6
+    .b
+      background-color: #5ad7db
+    .c
+      background-color: #7dced1
+    > .left
+      position: absolute
+      left: 0
+      top: 0
+      width: 100px
+    > .right
+      padding-left: 100px
+      > *
+        float: left
+      > .b
+        width: 25%
+      > .c
+        width: 75%
+
+.main_div2_3-2
+  .father
+    height: 50px
+    display: flex
+    div
+      height: 100%
+      line-height: 50px
+      text-align: center
+      color: $font_gray
+      font-size: 24px
+    .a
+      background-color: #8ae2e6
+    .b
+      background-color: #5ad7db
+    .c
+      background-color: #7dced1
+    > .a
+      width: 100px
+      flex: none
+    > .b
+      flex-grow: 1
+    > .c
+      flex-grow: 3

@@ -159,21 +159,20 @@
 <div><span style="font-size: 18px;">　　相比之前玩的游戏，『黑魂』真的是一个独特的系列。和许多动作游戏相比（怪物猎人），它有恢弘的剧情和足够你思考。和一些剧情体验类的游戏（life is strange、直到黎明），它有宏伟的地图让你去体验感受。宫崎英高和他的团队真的很厉害。</span>
 </div>
 <script type="application/javascript">
-        document.getElementById("myAudio").load();
-        document.getElementById("myAudio").play();
-        $(document.body).on('click', '#audioBtn', function () {
-            if ($(this).attr('isPlaying') == 'true') {
-                document.getElementById("myAudio").pause();
-                $(this).attr('isPlaying', 'false');
-                $(this).css('background-image', 'url("./独特的游戏性——《黑魂三》.resources/noSound.png"');
-            }
-            else {
-                document.getElementById("myAudio").load();
-                document.getElementById("myAudio").play();
-                $(this).attr('isPlaying', 'true');
-                $(this).css('background-image', 'url("./独特的游戏性——《黑魂三》.resources/sound.png"');
-            }
-        });
+    document.getElementById("myAudio").play();
+    $(document.body).on('click', '#audioBtn', function () {
+        if ($(this).attr('isPlaying') == 'true') {
+            document.getElementById("myAudio").pause();
+            $(this).attr('isPlaying', 'false');
+            $(this).css('background-image', 'url("./独特的游戏性——《黑魂三》.resources/noSound.png"');
+        }
+        else {
+            document.getElementById("myAudio").load();
+            document.getElementById("myAudio").play();
+            $(this).attr('isPlaying', 'true');
+            $(this).css('background-image', 'url("./独特的游戏性——《黑魂三》.resources/sound.png"');
+        }
+    });
 </script>
 </body>
 </html>

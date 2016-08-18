@@ -1,0 +1,20 @@
+// tips文章
+   Created by Jason on 15/12/15.
+doctype html
+html(lang="zh-cmn-Hans")
+    head
+        include ../Components/Meta&Script/head
+        block title
+        script(src="../Scripts/iframe.js")
+        link(rel="shortcut icon" href="./favicon.ico")
+        block meta
+    body
+        header.page
+            div
+                h1 JasonNing's Blog
+                a(href="../index.html") 返回首页
+        section#main_div
+            div.blogiframe
+                .nav
+                    block blcoknav
+                block iframe

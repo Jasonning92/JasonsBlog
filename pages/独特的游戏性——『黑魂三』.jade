@@ -1,20 +1,14 @@
 // tips文章
    Created by Jason on 15/12/15.
-doctype html
-html(lang="zh-cmn-Hans")
-    head
-        include ../Components/Meta&Script/head
-        block title
-        script(src="../Scripts/iframe.js")
-        link(rel="shortcut icon" href="./favicon.ico")
-        block meta
-    body
-        header.page
-            div
-                h1 JasonNing's Blog
-                a(href="../index.html") 返回首页
-        section#main_div
-            div.blogiframe
-                .nav
-                    block blcoknav
-                block iframe
+extends _layout
+block title
+    title 独特的游戏性——『黑魂三』
+block meta
+    meta(name="keywords" content="黑魂三,剧情,游戏性,游戏体验,游戏评测")
+    meta(name="description" content="黑魂三,剧情,游戏性,游戏体验,游戏评测")
+block blcoknav
+    a(href="../index.html") 首页
+    span >
+    a(href="javascript:void(0)") 独特的游戏性——『黑魂三』
+block iframe
+    iframe(src="../iframe/独特的游戏体验——『黑魂三』/独特的游戏性——《黑魂三》.html" marginheight="0" marginwidth="0" frameborder="0" id="iframepage" name="iframepage" onLoad="iFrameHeight()")
